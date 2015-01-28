@@ -1,0 +1,251 @@
+\documentclass[8pt]{extarticle}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\renewcommand\refname{Referenze}
+\usepackage[utf8x]{inputenc}
+\usepackage{titlesec}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage[document]{ragged2e}
+\titleformat{\section}{\huge\normalfont\bf}{\thesection.\hspace{5pt}}{5pt}{\vspace{1cm}}
+\titleformat*{\subsection}{\Large\bfseries}
+\usepackage[inner=3cm,outer=3cm]{geometry}
+
+\makeindex
+
+\begin{document}
+\justify
+\printindex
+\Large{A.a. 2013-2014}
+\vspace{10cm}
+\begin{center}
+\Huge\textbf{Tracciamento dei Raggi Cosmici}
+\end{center}
+
+\vspace{2cm}
+\begin{flushleft}
+\textit{Gruppo \textsc{1}} \\
+\medskip
+Federico \textsc{Massa} \\ 
+Marco \textsc{Montella}
+\end{flushleft}
+
+
+
+\newpage
+
+\begin{abstract}
+\justify
+ 
+
+\end{abstract}
+\bigskip
+
+\section{Introduzione}
+L'esperimento consiste nell'analisi dei dati provenienti da un telescopio per raggi cosmici facente parte del progetto \textit{Extreme Energy Events} (EEE). L'apparato è composto da un sistema di tre camere MRPC, grazie alle quali è possibile registrare il passaggio di una particella e le coordinate di arrivo su ognuna delle tre camere. Utilizzando questo sistema sono state effettuate varie misure: \\
+
+\begin{enumerate}
+\item Misura dell'efficienza dei piani di scintillatore in funzione della tensione di alimentazione.
+\item Misura del flusso di raggi cosmici.
+\item Misura della distribuzione angolare dei raggi cosmici.
+\item Studio della correlazione tra condizioni ambientali e il flusso dei raggi cosmici.
+\end{enumerate}
+
+Precedenti studi\cite{cos2} hanno misurato una distribuzione angolare dei raggi cosmici compatibile con la legge: \\
+
+\begin{equation}
+\frac{dN}{d\Omega} \propto cos^2 \theta
+\nonumber
+\end{equation}
+
+dove $\theta$ è l'angolo formato tra la retta identificante la traiettoria della particella e la normale alla superficie terrestre. \\
+
+Una parte dell'esperimento consiste pertanto nella simulazione, con metodi Montecarlo, della distribuzione angolare dei raggi cosmici che risultano in un effettivo segnale nell'apparato. La simulazione ha anche tenuto conto di alcuni difetti riscontrati nell'apparato (\textit{strip} delle camere non funzionanti) e della discretizzazione della coordinata trasversale alla direzione delle strip. \\
+
+\section{Apparato Sperimentale}
+\subsection{Rivelatore a camere MRPC}
+Il sistema consiste di tre \textit{Multi-gap Resistive Plate Chamber} (MRPC). La struttura di una di queste camere è mostrata in fig. \ref{fig:mrpc}. \\
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{mrpc}
+\caption{Sezione trasversale di una camera MRPC.}
+\label{fig:mrpc}
+\end{center}
+\end{figure}
+
+Una particolare miscela di gas è contenuta all'interno di sei strati di vetro, ognuno distante $300 \mu \ m$. Gli strati più esterni sono tenuti ad una certa differenza di potenziale, mentre gli strati interni si caricano per effetto dell'induzione elettrostatica. \\
+Quando una particella carica attraversa il sistema il gas viene ionizzato e la differenza di potenziale accelera gli elettroni i quali possono acquistare un'energia sufficiente a 
+provocare una valanga di elettroni secondari. L'insieme di questi elettroni induce un segnale su una o più \textit{strips} (\textit{readout pads} nella figura). Il sistema è composto da $24$ strip, ognuna larga $3.2 \ cm$ e l'area attiva misura $82 \ x \ 158 \ cm^2$. La distanza tra la camera in alto e quella media è $53.2 \ cm$, mentre la distanza tra quella media e quella in basso è $52.8 \ cm$.  Il resto degli elementi che compongono la camera sono strutturali o isolanti. \\
+
+\subsection{Sistema di acquisizione}
+Il segnale in uscita dalle strip viene digitalizzato da un'opportuna unità di Front-End e viene generato un segnale di trigger che potrà essere configurato via software per la selezione degli eventi.\\
+
+Le coordinate $(x,y)$ della particella sono ricostruite su un asse a partire dalla coordinata della strip che ha generato un segnale, sull'altro dall'analisi della differenza dei tempi di arrivo del segnale ai due estremi della strip. Le incertezze sono state stimate dai dati sperimentali, come descritto in sez. \ref{subsec:coord_err}. \\
+
+La coordinata y (quella relativa alla direzione parallela alle strip) è calcolabile, una volta nota la velocità di propagazione del segnale $v_s$, dalla relazione: \\
+\[y = \frac{v_s}{2} (t_s - t_d) \] \\
+
+dove $t_s$ e $t_d$ indicano i tempi di arrivo sui due estremi della strip. \\
+Un TDC (Time-to-Digital Converter) permette l'acquisizione in formato digitale di queste grandezze, da cui viene calcolato il valore della coordinata. \\
+
+Una serie di sensori di pressione, umidità e temperatura possono infine essere utilizzati per avere informazioni sulle condizioni ambientali al momento della presa dati.
+
+\subsection{Interfaccia software}
+Il processo di acquisizione è configurabile via software. Grazie ad un'interfaccia dedicata è possibile impostare parametri di acquisizione quali: \\
+\begin{itemize}
+\item Tensioni di alimentazione delle camere.
+\item Segnale di trigger.
+\item Numero di eventi da acquisire.
+\end{itemize}
+
+Le istruzioni possono anche essere riassunte in macro che permettono di automatizzare il processo.\\
+
+In uscita vengono restituiti i seguenti files: \\
+\begin{enumerate}
+\item \textbf{.dat}: contiene i dati provenienti dal sistema di acquisizione in formato binario, non processati.
+\item \textbf{.sta}: contiene i dati, sempre in formato binario, provenienti dai sensori e dalle letture di tensione.
+\item \textbf{.arc}: file di testo contente le informazioni sulla geometria del sistema, sul nome e ID del run.
+\item \textbf{.txt}: file di testo contenente le coordinate dei punti evento per evento e i valori delle letture dei sensori.
+\item \textbf{.sto}: file contenente una prima analisi dei risultati del run. Contiene informazioni quali le distribuzioni di occupancy nelle tre camere, la molteplicità di hit e i risultati di altre analisi condotti sugli eventi che presentano un solo hit per ogni camera, i quali non sono però stati utilizzati.
+\end{enumerate}
+
+Di questi, il fondamentale è quello \textbf{.txt}, ed è stato l'unico utilizzato nel corso dell'esperimento.
+
+\subsection{Scintillatori}
+Due scintillatori sono stati posizionati sopra e sotto il sistema di tracciamento. La loro misura è $44 \ x \ 125.5 cm^2$. Lo scintillatore posto sopra il sistema dista $37.5 \ cm$ dalla camera alta, mentre lo scintillatore posto sotto il sistema dista $16 \ cm$ dalla camera bassa. Gli scintillatori sono opportunamente alimentati, il loro segnale è digitalizzato ed è possibile utilizzare uno di questi o la loro coincidenza come segnale di trigger per il sistema di acquisizione. Il sistema così configurato è stato utilizzato per delle verifiche sulle misure di efficienza delle camere MRPC.
+
+\section{Operazioni preliminari}
+È stata effettuata un’analisi preliminare dei dati raccolti allo scopo di cercare eventuali anomalie macroscopiche nel funzionamento delle camere, come ad esempio eventuali strip mancanti o rumorose. Allo stesso tempo si è condotta un'analisi dell'efficienza delle tre camere in funzione della tensione di alimentazione ai capi delle strip (è questa l'alimentazione IMPORTANTE??). INTRO ALL'INCERTEZZA
+\subsection{Correzioni geometriche}
+\subsection{Stima dell'incertezza sulle coordinate}
+
+\subsection{Misure di Occupancy}
+Nel contesto dell'analisi del  corretto funzionamento delle camere si sono ricostruite all'interno di un run le distribuzioni di occupancy per ciascuna camera nella variabile direzionale discreta X (strip interessata/e) e continua Y (conteggi del TDC), al fine di identificare eventuali zone morte del rivelatore o regioni con una sospetta accumulazione di hits.\\
+(GRAFICI, SULLE SINGOLE CAMERE ETC, FARLI PICCOLI, SONO TANTI)
+(SCRIVERE QUALI SONO LE STRIP MANCANTI)
+(PRENDERE UN AND ALL PER QUESTA ANALISI, È PIÙ FACILE GIUSTIFICARE LA FORMA A CAMPANA O UNIFORME)
+
+In secondo luogo si è osservata la molteplicità di hit per evento in ciascuna camera, rilevando un trend rapidamente decrescente. [INSERIRE LE FRAZIONI DI EVENTI CON 1 HIT PER CAMERA, 2 HIT E COSÌ VIA]. 
+[DISCERNERE HIT MULTIPLI DI RUMORE DA QUALCOSA DI SEGNALE, GLI ALTRI PIANI QUANTO CONTANO QUANDO UNO CONTA MOLTO?]
+
+\subsection{Distribuzione delle distanze tra due hit in ciascuna camera}
+Si sono poi valutate per ciascun run la distanza geometrica tra gli hit di ciascun evento  sia sulle due dimensioni che sulle singole direttrici del piano. Ci si attende una distribuzione identificabile come somma di due componenti distinte, una ragionevolmente piatta dovuta agli hit non correlati e una piccata su un valore $d_0$ relativa agli eventi per cui gli hit multipli derivano da una comune causa fisica (che sia essa di segnale o di rumore). 
+Nel caso descritto sarebbe inoltre possibile definire una distanza di correlazione $d_c$ che rappresenta la distanza a cui si trovano all'incirca il 90\% delle coppie di hits appartenenti alla distribuzione di hits fisicamente correlati.
+
+[GRAFICO]
+(ESTRAPOLAZIONE DI dc, commento)
+\subsection{Misure di efficienza}
+Le misure di efficienza delle camere possono effettuate secondo modalità molteplici. L'efficienza del piano centrale può essere calcolata in modo immediato esaminando dati acquisiti con la modalità di trigger \textit{TOP-BOTTOM}, ovvero richiedendo la presenza di un hit nelle camere esterne per la registrazione di un evento, e valutando il numero di eventi per i quali viene anche ravvisato uno o più hit nella camera centrale. \\
+Lo stesso metodo non può però essere applicato nel calcolo delle efficienze dei piani estremi, in quanto una particella non passante il piano oggetto dell'analisi può comunque attraversare i due rimanenti e far scattare il trigger, falsando il risultato.
+\subsubsection{Efficienza con ricostruzione tracce}
+Questo problema viene aggirato utilizzando una variante dell'algoritmo di ricostruzione delle tracce che sarà descritto nel dettaglio in sezione (\ref{subsub:algoritmo}). L'algoritmo ricostruisce la traccia a partire dalle coppie di hit nei piani spettatori e determina se esiste un hit nella camera in analisi che conduca ad un fit a tre punti accettabile. Qualora il prolungamento della traccia virtuale determinata dagli hit sui piani spettatori cada al di fuori della zona attiva del piano in analisi l'evento viene scartato senza incidere sul calcolo dell'efficienza.
+[GRAFICI]
+[GRAFICI IN FUNZIONE DELLA TENSIONE]
+
+\subsubsection{Uso degli scintillatori}
+\'E possibile effetturare una seconda stima delle efficienze sfruttando un sistema alternativo di trigger. \\
+Per realizzare tale trigger alternativo si fa uso di due piani scintillatori esterni all'apparato di dimensione 44x120 cm precedentemente calibrati e messi in tempo dal personale responsabile e posizionati uno al di sopra del piano superiore e uno al di sotto del piano più vicino al suolo. Il segnale di trigger per l'acquisizione nelle tre camere  MRPC viene dato dalla coincidenza dei segnali di output dei due scintillatori. \\
+Il calcolo effettivo dell'efficienza utilizzando i dati acquisiti con il metodo appena descritto può essere condotta facendo o meno uso della ricostruzione delle tracce.
+Qualora i valori di efficienza calcolati con il trigger esterno non fossero compatibili con le misure delle medesime quantità effettuate in precedenza si avrebbe un indizio della possibile presenza di un problema nel sistema di trigger dell'apparato.\\
+(VALORI EFFICIENZE, GRAFICO VARIAZIONE CON LA TENSIONE, GRAFICO PARAGONE TRIGGER ESTERNO O INTERNO)
+
+\section{Metodo di misura}
+
+\subsection{Determinazione della distribuzione angolare dei RC}
+
+\subsubsection{Ricostruzione delle tracce} \label{subsub:algoritmo}
+L’acquisizione delle misure è per il momento effettuata in modalità AND ALL, ovvero triggerando su tutte e tre le camere. Nonostante ciò nei file ad alta statistica sono comunque presenti un certo numero di eventi senza almeno un hit per camera, i quali vengono ignorati nel seguito dell’analisi.\\
+Gli eventi che rispettano la condizione di trigger vengono analizzati con un software in linguaggio C++ interfacciato ROOT finalizzato alla ricostruzione della traccia eventuale e all’estrapolazione dei parametri angolari della traccia in questione.\\
+
+Qualunque valore assumano i parametri della traccia tridimensionale $(\theta, \phi)$, essi possono sempre essere determinati univocamente a partire dall'analisi delle proiezioni bidimensionali determinate dalla traccia su due dei tre piani proiettivi XY, YZ e XZ. \\
+A causa del fatto che i valori delle coordinate X e Z resituiti dall'apparato sono entrambi discreti, si è deciso di non eseguire analisi quest’ultimo piano, onde evitare indeterminazioni ed eventuali problemi con l'algoritmo di fit e di calcolo del chi quadro in caso di retta verticale.\\
+I fit individali restituiscono delle rette della forma $Y=mX+q$ e $Z=nY+k$ rispettivamente.
+\\
+L'angolo azimutale $\phi$ è determinato interamente a partire dalla pendenza della traccia proiettiva sul piano XY, corrispondente al piano di una camera, e risulta:\[\tan{\phi}=\frac{dY}{dX}\biggr\rvert_{fit}\]
+L'angolo $\theta$ della traccia con la verticale alle camere, si ottiene come:
+\begin{equation}
+\tan{\theta}=\Bigg(\frac{dZ}{dY}\biggr\rvert_{fit}\!\!\!\cdot \sin{\phi}\Bigg)^{-1}
+\end{equation}
+
+L’algoritmo di ricostruzione incorpora inoltre un processo decisionale per la scelta della migliore triplette di punti nei tre piani all'interno di un evento, necessario nel caso in cui vi sia più di un hit per ciascuna camera. \\ 
+Esso consiste nella selezione della coppia di tracce con chi quadro ridotto cumulativo [O INDIVIDUALE?] minimo tra tutte quelle considerate. Una volta identificata la traccia migliore viene effettuata un'ulteriore selezione sul chi quadro in modo da escludere gli eventuali eventi in cui non esista alcuna terna di punti riconducibile ad una traccia rettilinea nel rivelatore.
+%L'algoritmo si configura come un ciclo delle seguenti operazioni all'interno di ogni evento:\\
+%\\
+%\begin{enumerate}
+%\item Identificazione di una tripletta di punti nelle tre camere diverse.
+%\item Fit delle proiezioni sui piani XY e YZ, calcolo dei chi quadri ed estrazione dei ($\theta, \phi$) della retta del fit.
+%\item Definizione di una variabile di controllo $\chi^2_{av}=\frac{1}{2}(\chi^2_{xy}+\chi^2_{yz})$. (chi quadri ridotti)
+%\item Confronto del valore di $\chi^2_{av}$ relativo alla tripletta in analisi rispetto al parametro di selezione $\chi^2_{temp}$, definito arbitrariamente pari a 10 nella prima iterazione del processo.
+%\item \textbf{SE} $\chi^2_{av}(i)<\chi^2_{av}(i-1)$, allora si pone $\chi^2_{temp}=\chi^2_{av}$ e $(\theta,\phi)_{temp}=(\theta,\phi)_i$, altrimenti i parametri temporanei sono lasciati invariati.
+%\item identificazione di una nuova tripletta di punti non ancora analizzata.
+%\end{enumerate}
+
+%Al termine dell'analisi di tutte le possibili triplette in un evento, l'algoritmo restituisce i parametri della tripletta meglio allineata, la cui distribuzione è oggetto dell'indagine sperimentale. I punti (5-6) non si pone nel caso di eventi con un solo hit per camera. In questo caso, tuttavia, si effettua un controllo sul valore del chi quadro medio dei due fit e, in caso esso non sia accettabile, l'evento viene rigettato.
+(RIPENSARE RAPIDAMENTE ALL'EFFICACIA DEL CONTROLLO SULLA SOMMA DEI CHI QUADRI DELLE PROIEZIONI, MAGARI È MEGLIO FARE IL CONTROLLO SUI CHI QUADRI SINGOLI?)
+(DECISIONE DI QUALE SOGLIA DEL CHI QUADRO METTERE, IMPORTANTE E PROVARE A GIUSTIFICARE)\\
+
+
+\subsubsection{Algoritmo di riconoscimento dei \textit{clusters}}
+
+\subsection{Variabilità introdotta dalle condizioni ambientali}
+
+\subsubsection{Umidità esterna}
+
+\subsubsection{Pressione Atmosferica esterna}
+
+\subsubsection{Temperatura esterna}
+
+
+
+\section{Simulazione}
+
+\subsection{Calcolo dell'accettanza}
+In primo luogo è stato sviluppato un programma in C++ interfacciato in ROOT per calcolare l’accettanza dell’apparato note le caratteristiche geometriche e di efficienza delle aree sensibili dei tre piani di rivelazione.//
+In questo modo si è inoltre potuto valutare la distribuzione teorica dei raggi cosmici accettati nell’angolo polare $\theta$ e nell’angolo azimutale $\phi$. \\
+Le misure di efficienza dei singoli piani effettuati in precedenza sono state implementate nel calcolo dell'accettanza, permettendo così di ottenere un coefficiente moltiplicativo realistico grazie al quale stimare, a partire dai dati di flusso, la frazione misurata del rate di raggi cosmici.
+
+
+%La forma di quest’ultima distribuzione risulta fortemente dipendente dalle caratteristiche geometriche del singolo piano, e la di essi forma rettangolare causa  la presenza di un massimo dell’accettanza differenziale in phi lungo la direzione del lato maggiore.
+%La distribuzione in phi è inoltre più sensibile ad un eventuale cattivo allineamento dei tre piani, secondo modalità tuttora da indagare appieno. 
+
+\subsection{Effetto della discretizzazione della coordinata X}
+
+\subsection{Effetto delle strip mancanti}
+
+
+
+
+\section{Risultati Sperimentali}
+
+
+
+
+\section{Conclusioni}
+\subsection{Stima dell'incertezza sulle coordinate} \label{subsec:coord_err}
+\subsection{Misure di Occupancy}
+\subsection{Misure di efficienza}
+\section{Metodo di misura}
+\subsection{Determinazione della distribuzione angolare dei RC}
+\subsubsection{Ricostruzione delle tracce}
+\subsubsection{Algoritmo di riconoscimento dei \textit{clusters}}
+\subsection{Variabilità introdotta dalle condizioni ambientali}
+\subsubsection{Umidità esterna}
+\subsubsection{Pressione Atmosferica esterna}
+\subsubsection{Temperatura esterna}
+
+\section{Simulazione}
+\subsection{Calcolo dell'accettanza}
+\subsection{Effetto della discretizzazione della coordinata X}
+\subsection{Effetto delle strip mancanti}
+
+\section{Risultati Sperimentali}
+\section{Conclusioni}
+
+\input{bibEEE.bib}
+
+
+\end{document}
