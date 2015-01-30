@@ -28,6 +28,9 @@ int GetHitCount(string str){ //Calcola il numero di hits per evento
 
 void tracksclust(){  
 
+  double primatheta=0; // theta prima della clusterizzazione
+  double primaphi=0;  // stessa cosa
+
   //variabili di cluster
   double xrad1 = 10;
   double xrad2 = 10;
@@ -35,6 +38,7 @@ void tracksclust(){
   double yrad1 = 3;
   double yrad2 = 3;
   double yrad3 = 3;
+  double xyrad  = 10.5; // VARIABILE DEL CLUSTER BIDIMENSIONALE, ANZICHÈ FARE LA CLUSTERIZZAZIONE SU DUE ASSI, SI FA IN DUE DIMENSIONI, 10.5 OTTENUTO PROVVISORIAMENTE COME SQRT(XRAD2+YRAD2)
 
   double midx1= 0, midx2= 0, midx3= 0, midy1= 0, midy2 = 0, midy3 = 0;
   double jx1 = 0, jx2 = 0, jx3 = 0, jy1 = 0, jy2 = 0, jy3 = 0;
@@ -47,11 +51,14 @@ void tracksclust(){
 
   TH1F* clustdistheta = new TH1F("cdist","Clustered Theta distribution", 50, 0,2*atan(1.));
   TH1F* clustdisphi = new TH1F("cdisp","Clustered Phi distribution", 100, 0, 8*atan(1.));
+  TH2F* preposttheta= new TH2F("clustheta","Theta pre cluster vs Theta post cluster; Theta PRE (grad); Theta POST (grad)",50,0,2*atan(1.),50,0,2*atan(1.));
+  TH2F* prepostphi= new TH2F("clustphi","Phi pre cluster vs Phi post cluster; Phi PRE (grad); Phi POST (grad)",100,0,8*atan(1.),100,0,8*atan(1.));
 
 
-  ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
+  ifstream run("../../Data/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
   //  int point::n = 0;
   TFile rfile("Distclust.root","RECREATE");
+
   TH1F* dischi = new TH1F("dischi","Chi2 distribution; chi2; #", 100,0,1000);
   TH1F* hpc1 = new TH1F("hpc1", "Hit per chamber / Chamber 1; #Hits;# ", 20,0,20);
   TH1F* hpc2 = new TH1F("hpc2", "Hit per chamber / Chamber 2;#Hits;#", 20,0,20);
@@ -108,11 +115,11 @@ void tracksclust(){
     ch3 = 0;
 
     linecount = GetHitCount(line);
-
+    cout << line << "linea"  << endl;
     if (linecount == 0){getline(run,line); continue;}
 
        point* hit = new point[linecount];//alloca la memoria per tutti i punti dell'evento
-       //   cout << point::n << endl;
+       cout << linecount << " linecount"<< endl;
   // cout << GetHitCount(line) << endl;
   for (unsigned int i = 0; i < line.size()+1; i++) {
     if(!isalnum(line[i]) && line[i] != '.' && line[i] != '-') {
@@ -120,6 +127,7 @@ void tracksclust(){
       if (entry != "" && j == 4) {stringstream(entry) >> number; cout << "EVENTO NUMERO: " << number << endl;} 
       if (entry != "" && j >= 9) {
 	stringstream(entry) >> number;
+	//	cout << "appena dopo" << endl;
 	//    	cout << number << endl;
 	hit[int(floor((double(j)-9)/3))].SetValue(j%3,number);
 	//	    cout << "OK" << endl;
@@ -144,20 +152,21 @@ void tracksclust(){
   double* x = new double[linecount];
   double* y = new double[linecount];
   double* z = new double[linecount];
-  
+  cout << "eeee" << endl;
 
   for (int q = 0; q < linecount; q++){
     x[q] = hit[q].x;
     y[q] = hit[q].y;
     z[q] = hit[q].z;}
   TGraph2D* evdisplay = new TGraph2D(linecount,x,y,z);
-  
+  //cout << "qqq" << endl;
   if (k == 608) evdisplay->Write();
-
+  cout << "uuuu" << endl;
   //Plot distanze tra due hit, per le camere 2 e 3 aggiunto un offset di ch1 o (ch1+ch2) perché gli 
   // hit sono in ordine di camera nel file
   for (int h = ch1; h > 0; h--){
     for(int p = ch1-1; p < h && p >= 0; p--){
+      cout << "aaaa" << endl;
 	  disdist1->Fill(pow(pow(hit[h].x-hit[p].x,2)+pow(hit[h].y-hit[p].y,2),0.5));
     disdistx1->Fill(hit[h].x-hit[p].x);
     disdisty1->Fill(hit[h].y-hit[p].y);
@@ -169,23 +178,26 @@ void tracksclust(){
 	      disdistx2->Fill(hit[h+ch1].x-hit[p+ch1].x);
     disdisty2->Fill(hit[h+ch1].y-hit[p+ch1].y);
     }}
-
+ cout << "aa1" << endl;
  for (int h = ch3; h > 0; h--){
     for(int p = ch3-1; p < h && p >= 0; p--){
 	  disdist3->Fill(pow(pow(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x,2)+pow(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y,2),0.5));
     disdistx3->Fill(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x);
     disdisty3->Fill(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y);
     }}
-	  
+ cout << ch1 << ch2 << ch3 <<  endl;
   //   cout << "DOPO FOR" << endl;
  //Controllo la bontà dell'evento: ha almeno un hit per camera?
   if (ch1 < 1 || ch2 < 1 || ch3 < 1){/*cout << "EVENTO NON BUONO" << endl;*/ 
     j = 0; 
+
     delete [] hit;
+    cout << "DENTERO" << endl;
     // cout << point::n << endl;
     delete[] x;
     delete[] y;
     delete[] z;
+    cout << "oooo" << endl;
     delete evdisplay;
     getline(run,line);
     entry = ""; 
@@ -193,12 +205,12 @@ void tracksclust(){
     continue;} //Evento non buono: prossimo evento
 
   else { //evento con almeno un hit per camera
-   
+    cout << "aaa3" << endl;
     //    for (int kk = 0; kk < 3; kk++) {
     //	cout << hit[kk].x << endl;
     //	cout << hit[kk].y << endl;
     //	cout << hit[kk].z << endl;}
-   
+    cout << "ooooO" << endl;
    for (int a = 0; a < (ch1); a++) {
      for (int b = 0; b < (ch2); b++) {
        for (int c = 0; c < (ch3); c++) {
@@ -212,7 +224,8 @@ void tracksclust(){
    		  //		  cout << "DOPO CHI" << endl;
    		  temptheta = n1.GetTheta();
    		  tempphi = n1.GetPhi();
-   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; theta = temptheta; phi = tempphi; besta = a; bestb = b; bestc = c;}
+   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; theta = temptheta; phi = tempphi; besta = a; bestb = b; bestc = c;
+		  }
        }}}
    disxy1->Fill(n1.GetCoordinate(0,0),n1.GetCoordinate(1,0));
    disxy2->Fill(n1.GetCoordinate(0,1),n1.GetCoordinate(1,1));
@@ -230,7 +243,11 @@ void tracksclust(){
 
       //CLUSTER
       {
-	 XYint = n1.XYGetParameter(0);
+
+	//	primatheta=n1.GetTheta();// per le distribuzioni delle differenze
+	//primaphi=n1.GetPhi();
+
+	XYint = n1.XYGetParameter(0);
 	 YZint = n1.YZGetParameter(0);
 	 XZint = n1.XZGetParameter(0);
  
@@ -238,52 +255,75 @@ void tracksclust(){
 	 YZpen= n1.YZGetParameter(1);
 	 XZpen = n1.XZGetParameter(1);
 
-	 midx1 = (zch1-XZint)/XZpen;
-	 midx2 = (zch2-XZint)/XZpen;
-	 midx3 = (zch3-XZint)/XZpen;
+	 midx1 = (zch1-YZint-XYint*YZpen)/(XYpen*YZpen);
+	 midx2 = (zch2-YZint-XYint*YZpen)/(XYpen*YZpen);
+	 midx3 = (zch3-YZint-XYint*YZpen)/(XYpen*YZpen);
 
 	 midy1 = (zch1-YZint)/YZpen;
 	 midy2 = (zch2-YZint)/YZpen;
 	 midy3 = (zch3-YZint)/YZpen;
 
 	 for(int m1 = 0; m1 < ch1; m1++) {
-	   if(absval(hit[m1].x - midx1) <= xrad1) {xav1 = (xav1*jx1+ hit[m1].x)/(jx1+1);jx1+= 1;}
-	   else {xav1 = hit[besta].x;} //ATTENZIONE A QUESTO! SECONDO ME SBAGLIATO PER DUE MOTIVI: 1. questo else dovrebbe esserci solo se
-	   // non è stato trovato alcun cluster, 2. clusterizzare indipendentemente x e y è sbagliato, bisogna guardare la distanza tra il punto della traccia centrale e quello in esame, non le singole coordinate. Inoltre, usando
-	   // questo metodo di clusterizzazione, la distribuzione di theta e 
-	   // phi non cambia, perché la traccia viene comunque scelta in modo da
-	   //minimizzare il chi2 tra tutti i punti, e non viene prima fatta una media e poi fittato. 
-	   
-	    if(absval(hit[m1].y - midy1) <= yrad1) {yav1 = (yav1*jy1+ hit[m1].y)/(jy1+1);jy1+= 1;}
-	   else {yav1 = hit[besta].y;}
-	 }
-
+	   if( (hit[m1].x-midx1)*(hit[m1].x-midx1)+(hit[m1].y-midy1)*(hit[m1].y-midy1)  <= xyrad*xyrad) {
+	     xav1 = (xav1*jx1+ hit[m1].x)/(jx1+1);
+	     yav1 = (yav1*jy1+ hit[m1].y)/(jy1+1);jy1+= 1;
+	     jx1+= 1;
+	   }
+	     else {xav1 = hit[besta].x;}
+	 } 
+	     //if(absval(hit[m1].y - midy1) <= yrad1) {yav1 = (yav1*jy1+ hit[m1].y)/(jy1+1);jy1+= 1;}
+	     // else {yav1 = hit[besta].y;}
+	  
 	 for(int m2 = 0; m2 < ch2; m2++) {
-	   if(absval(hit[m2+ch1].x - midx2) <= xrad2) {xav2 = (xav2*jx2+ hit[m2+ch1].x)/(jx2+1);jx2+= 1;}
-	   else {xav2 = hit[bestb+ch1].x;}
-	   
-	    if(absval(hit[m2+ch1].y - midy2) <= yrad2) {yav2 = (yav2*jy2+ hit[m2+ch1].y)/(jy2+1);jy2+= 1;}
-	   else {yav2 = hit[bestb+ch1].y;}
+	   if( (hit[m2].x-midx2)*(hit[m2].x-midx2)+(hit[m2].y-midy2)*(hit[m2].y-midy2)  <= xyrad) {
+	     cout << "primissima" << endl;
+	     xav2 = (xav2*jx2+ hit[m2].x)/(jx2+1);
+	     yav2 = (yav2*jy2+ hit[m2].y)/(jy2+1);jy2+= 1;
+	     jx2+= 1;
+
+	   }
+	     else {xav2 = hit[besta].x;}
 	 }
 
 	 for(int m3 = 0; m3 < ch3; m3++) {
-	   if(absval(hit[m3+ch1+ch2].x - midx3) <= xrad3) {xav3 = (xav3*jx3+ hit[m3+ch1+ch2].x)/(jx3+1);jx3+= 1;}
-	   else {xav3 = hit[bestc+ch1+ch2].x;}
-	   
-	    if(absval(hit[m3+ch1+ch2].y - midy3) <= yrad3) {yav3 = (yav3*jy3+ hit[m3+ch1+ch2].y)/(jy3+1);jy3+= 1;}
-	   else {yav3 = hit[bestc+ch1+ch2].y;}
+	   if( (hit[m3].x-midx3)*(hit[m3].x-midx3)+(hit[m3].y-midy3)*(hit[m3].y-midy3)  <= xyrad) {
+	     xav3 = (xav3*jx3+ hit[m3].x)/(jx3+1);
+	     yav1 = (yav3*jy3+ hit[m3].y)/(jy3+1);jy3+= 1;
+	     jx3+= 1;
+	   }
+	     else {xav3 = hit[besta].x;}
 	 }
+	 
+//   
+
+	 // for(int m2 = 0; m2 < ch2; m2++) {
+	 //   if(absval(hit[m2+ch1].x - midx2) <= xrad2) {xav2 = (xav2*jx2+ hit[m2+ch1].x)/(jx2+1);jx2+= 1;}
+	 //   else {xav2 = hit[bestb+ch1].x;}
+	   
+	 //    if(absval(hit[m2+ch1].y - midy2) <= yrad2) {yav2 = (yav2*jy2+ hit[m2+ch1].y)/(jy2+1);jy2+= 1;}
+	 //   else {yav2 = hit[bestb+ch1].y;}
+	 // }
+
+	 // for(int m3 = 0; m3 < ch3; m3++) {
+	 //   if(absval(hit[m3+ch1+ch2].x - midx3) <= xrad3) {xav3 = (xav3*jx3+ hit[m3+ch1+ch2].x)/(jx3+1);jx3+= 1;}
+	 //   else {xav3 = hit[bestc+ch1+ch2].x;}
+	   
+	 //    if(absval(hit[m3+ch1+ch2].y - midy3) <= yrad3) {yav3 = (yav3*jy3+ hit[m3+ch1+ch2].y)/(jy3+1);jy3+= 1;}
+	 //   else {yav3 = hit[bestc+ch1+ch2].y;}
+	 // }
 
 	 if (chi > 0 && chi < 10) {
-  distheta->Fill(theta);
-  disphi->Fill(phi); }
+	   primatheta=n1.GetTheta();
+	   primaphi=n1.GetPhi();// dovrebbero essere questi gli angoli
+	   distheta->Fill(primatheta);
+	   disphi->Fill(primaphi); }
 
   hit[0].SetValues(xav1,yav1,zch1);
   hit[1].SetValues(xav2,yav2,zch2);
   hit[2].SetValues(xav3,yav3,zch3);
   n1.SetPoints(hit[0],hit[1],hit[2]);
   n1.Fit();
-  chi = (n1.XYGetChisquare()+n1.YZGetChisquare()+n1.XZGetChisquare())/3;
+    chi = (n1.XYGetChisquare()+n1.YZGetChisquare()+n1.XZGetChisquare())/3;
   
       } //END CLUSTER
   
@@ -293,7 +333,10 @@ void tracksclust(){
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;
 	 //   if (theta <= 0.025){cout << "TROVATO THETA = 0 in evento" << k << " con theta: " << theta << " e phi: " << phi << " xyparamter: " << n1.XYGetParameter(1) << " yzparameter: " << n1.YZGetParameter(1) << endl; cin.get();}
-       
+	 cout << "prima" << endl;
+	 preposttheta->Fill(primatheta,n1.GetTheta());
+	 cout << "dopo" << endl;
+	 prepostphi->Fill(primaphi,n1.GetPhi());
 	 clustdistheta->Fill(n1.GetTheta());
 	 clustdisphi->Fill(n1.GetPhi());
 
@@ -377,6 +420,8 @@ void tracksclust(){
     dischi->Write();
      distheta->Write();
      disphi->Write();
+     preposttheta->Write();
+     prepostphi->Write();
      rfile.Close();
      run.close();
 }
