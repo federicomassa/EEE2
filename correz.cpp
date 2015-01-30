@@ -29,14 +29,14 @@ void correz(){
   int stripnum = -1;
   double corrx = 0, corry1 = 0, corry2 = 0, corry3 = 0;
   int chnum = 0;
-  char dest1[80] = "../Data/";
-  char dest2[80] = "../Data/";
+  char dest1[80] = "../EEEData/";
+  char dest2[80] = "../EEEData/";
   char ofile[80];
   strcpy(ofile,dest2);
    char infile1[80] = "EEE_PISA01TestRun4Telescopes_20140507_014455.txt";
    // char infile2[80] = "EEE_Prova_topbottom8900__20140530_174533.txt";
    //  char infile2[80] = "EEE_Prova_topmid9000__20140530_181026.txt";
-  char infile2[80] = "EEE_Prova_midbottom9000__20140530_184644.txt";
+   char infile2[80] = "EEE_Prova_midbottom9000__20140530_184644.txt"; //questo è quello che andrà corretto
   strcat(dest1,infile1);
   strcat(dest2,infile2);
   ifstream run(dest1); //INPUT FILE 

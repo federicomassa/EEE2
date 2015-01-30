@@ -29,7 +29,7 @@ void tracks(){
   bool bestvert = false;
   //  double *besty = new double[3];
   // ifstream run("../Data/EEE_Prova_topbottom8900__20140530_174533.txt"); //INPUT FILE
-    ifstream run("../Data/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
+    ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
   //  int point::n = 0;
     // TFile rfile("Disttopbot.root","RECREATE");
  TFile rfile("Dist_all_trasl.root","RECREATE");
