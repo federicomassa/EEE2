@@ -2,6 +2,7 @@
 #include <TF1.h>
 #include <TGraphErrors.h>
 #include <TCanvas.h>
+#include <TMath.h>
 
 using namespace std;
 
@@ -9,8 +10,8 @@ double absval(double d) {
   if (d >= 0) return (d);
   else return (-d);}
 
-double sqrt(double a) {return pow(a,0.5);}
-double sqr(double a) {return pow(a,2);}
+double sqrt(double a) {return TMath::Sqrt(a);}
+double sqr(double a) {return (a*a);}
 
 class triplet{
 public:
@@ -22,7 +23,8 @@ public:
     double eqerr[3];
     double result = 0;
     // somma in quadratura: attenzione: viene usata la pendenza tra due punti per il calcolo di eqerr
-    for (unsigned n = 0; n < 3; n++) eqerr[n] = sqrt(sqr(yerr[n]) + sqr(XYGetSlope()*xerr[n]));
+        for (unsigned n = 0; n < 3; n++) eqerr[n] = sqrt(sqr(yerr[n]) + sqr(XYGetSlope()*xerr[n]));
+
     for (unsigned n = 0; n < 3; n++) result += sqr((yv[n]- (XYGetParameter(0) + XYGetParameter(1)*xv[n]))/eqerr[n]);
     return result; 
 
@@ -43,7 +45,8 @@ public:
     double eqerr[3];
     double result = 0;
     // somma in quadratura
-    for (unsigned n = 0; n < 3; n++) eqerr[n] = sqrt(sqr(zerr[n]) + sqr(YZGetSlope()*yerr[n]));
+     for (unsigned n = 0; n < 3; n++) eqerr[n] = sqrt(sqr(zerr[n]) + sqr(YZGetSlope()*yerr[n]));
+     //  for (unsigned n = 0; n < 3; n++) eqerr[n] = zerr[n] + YZGetSlope()*yerr[n];
     for (unsigned n = 0; n < 3; n++) result += sqr((zv[n]- (YZGetParameter(0) + YZGetParameter(1)*yv[n]))/eqerr[n]);
     return result;
   }
@@ -130,7 +133,8 @@ void SetPoints(point x1, point x2, point x3){
     zv[0] = x1.z; zv[1] = x2.z; zv[2] = x3.z;
     //controllo di verticalità
     if (xv[0] == xv[1] && xv[0] == xv[2]) vert = true; else vert = false;
-    for (int i = 0; i < 3;i++) {xerr[i] = 1.44; yerr[i] = 2;zerr[i] = 0.5;}
+      for (int i = 0; i < 3;i++) {xerr[i] = 1.44; yerr[i] = 2;zerr[i] = 0.5;}
+      // for (int i = 0; i < 3;i++) {xerr[i] = 1; yerr[i] = 0;zerr[i] = 3.333;}
 };  //incertezze di default, rivedere perché 2.
   
    triplet(point x1, point x2, point x3){
@@ -270,11 +274,17 @@ void fit(){
   // point* p3 = new point; p3->SetValues(-20,0,23);
 
   point* p1 = new point; p1->SetValues(-30.00,138.24,145.00); 
-  point* p2 = new point; p2->SetValues(-30.00,92.55,85.00);
-  point* p3 = new point; p3->SetValues(-30,66.24,23.00);
+  point* p2 = new point; p2->SetValues(-32.00,92.55,145.00);
+  point* p3 = new point; p3->SetValues(-34.00,66.24,145.00);
   triplet n1; n1.SetPoints(*p1,*p2,*p3);
   n1.XYFit();
   n1.YZFit();
+  n1.XZFit();
+  n1.yzgraph->DrawClone("APE");
+  n1.yzfitfunc->DrawClone("same");
+  cout << "xy: " << n1.XYGetChisquare() << endl;
+  cout << "xz: " << n1.XZGetChisquare() << endl;
+  cout << "yz: " << n1.YZGetChisquare() << endl;
   
   // TGraphErrors* g1 = new TGraphErrors(3,n1.yv,n1.zv,n1.yerr,n1.zerr);
   // cout << "intercetta: " << n1.YZGetIntercept();
@@ -293,10 +303,10 @@ void fit(){
   // cout << "XY: " << n1.XYGetChisquare() << endl;
 
   cout << '\n' << "MANUALE" << '\n' << endl;
-
-  cout << "yz: " << n1.YZGetChisquare() << endl;
-  // cout << "xz: " << n1.XZGetChisquare_m() << endl;
   cout << "xy: " << n1.XYGetChisquare_m() << endl;
+  cout << "xz: " << n1.XZGetChisquare_m() << endl;
+  cout << "yz: " << n1.YZGetChisquare_m() << endl;
+
   cout << "theta: " << n1.GetTheta() << endl;
   cout << "phi: " << n1.GetPhi() << endl;
   // double chi = n1.XYGetChisquare();

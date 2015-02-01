@@ -6,7 +6,7 @@
 #include <TGraph2D.h>
 #include <TFile.h>
 #include <iostream>
-#include "fit.cpp"  //contiene le classi point e triplet
+#include "fit3.cpp"  //contiene le classi point e triplet
 #include <fstream>
 
 #include <string>
@@ -23,8 +23,6 @@ int GetHitCount(string str){ //Calcola il numero di hits per evento
   return (s-9)/3;
 }; // 9 blocchi prima dell'inizio delle 3 coordinate
 
-
-
 void top_mid_tracks(){
   double x3, y3, z3;
   int count2 = 0;
@@ -33,8 +31,8 @@ void top_mid_tracks(){
   bool bestvert = false;
   // double *besty = new double[3];
   // double parameter = 0;
-   ifstream run("../Data/CORR_EEE_Prova_topmid9000__20140530_181026.txt"); //INPUT FILE  
-  TFile rfile("Disttopmid_9000.root","RECREATE");
+   ifstream run("../CORR_EEE_Prova2_topmid7500__20140614_024824.txt"); //INPUT FILE  
+  TFile rfile("Disttopmid_7500.root","RECREATE");
   TH2F* zeroch3 = new TH2F("zeroch3","Hit distribution when ch3 = 0", 30,0,15,30,0,15);
   TH1F* dischi = new TH1F("dischi","Chi2 distribution; chi2; #", 100,0,1000);
   TH1F* hpc1 = new TH1F("hpc1", "Hit per chamber / Chamber 1; #Hits;# ", 20,0,20);
@@ -62,7 +60,7 @@ void top_mid_tracks(){
   TH1F* disdisty2 = new TH1F("disdisty2","Y Distance distribution, Ch2;Y Distance;#",800,-400,400);
   TH1F* disdisty3 = new TH1F("disdisty3","Y Distance distribution, Ch3;Y Distance;#",800,-400,400);
   triplet n1;
-  double chi = 1000, tempchi = 0,xytempchi = 0, yztempchi = 0, theta = 1000, phi = 1000;
+  double chi = 1000, tempchi = 0,yxtempchi = 0, yztempchi = 0, zxtempchi = 0, theta = 1000, phi = 1000;
   int j = 0;
   double number = 0;
   string line;
@@ -185,7 +183,7 @@ void top_mid_tracks(){
 	for (int b = 0; b < ch2; b++) {
 
 	  z3 = zch3;
-	  x3 = (z3-XZGetIntercept(hit[a],hit[b+ch1]))/XZGetSlope(hit[a],hit[b+ch1]);
+	  x3 = ZXGetIntercept(hit[a],hit[b+ch1]) + ZXGetSlope(hit[a],hit[b+ch1])*z3;
 	  y3 = (z3-YZGetIntercept(hit[a],hit[b+ch1]))/YZGetSlope(hit[a],hit[b+ch1]);
 	
 	  if ((sqr(x3) < sqr(82.0-82.0/24.0)) && (sqr(y3) < sqr(158.0))) count2 += 1;
@@ -208,14 +206,13 @@ void top_mid_tracks(){
        for (int c = 0; c < (ch3); c++) {
    	 	 n1.SetPoints(hit[a],hit[b+ch1],hit[c+ch1+ch2]); //considero tutte le combinazioni di triplette
    		  //		  cout << "PRIMA FIT" << endl;
-   		  n1.XYFit();
-   		  n1.YZFit();
+   		  n1.Fit();
    		  //  cout << "DOPO FIT" << endl;
-		  if (!n1.vert)
-		  tempchi = (n1.XYGetChisquare_m()/*+n1.XZGetChisquare_m()*/ +n1.YZGetChisquare_m())/2; //tolto xz per sicurezza: potrebbe essere verticale
+		  if (!n1.xvert)
+		  tempchi = (n1.YXGetChisquare_m()+n1.ZXGetChisquare_m() +n1.YZGetChisquare_m())/3; //tolto xz per sicurezza: potrebbe essere verticale
 		  else tempchi = n1.YZGetChisquare_m()/2;
    		  //		  cout << "DOPO CHI" << endl;
-   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; xytempchi = n1.XYGetChisquare_m(); yztempchi = n1.YZGetChisquare_m(); /* xztempchi = n1.XZGetChisquare_m();*/ theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ bestvert = n1.vert;}
+   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; yxtempchi = n1.YXGetChisquare_m(); yztempchi = n1.YZGetChisquare_m();  zxtempchi = n1.ZXGetChisquare_m(); theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ bestvert = n1.xvert;}
        }}}
    // if (parameter > 100000) {cout << "THETA: " << theta << endl; cout << "PHI: " << phi << endl; cout << "y SOSPETTE: " << besty[0] << " " << besty[1] << " " << besty[2] << endl; cout << "k: " << k << endl;}
    disxy1->Fill(n1.GetCoordinate(0,0),n1.GetCoordinate(1,0));
@@ -234,7 +231,7 @@ void top_mid_tracks(){
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "evnum: " << evnum << endl; cin.get();}
-      if( ((xytempchi>0 || bestvert) && yztempchi/**xztempchi*/ > 0) && (xytempchi < 30 || bestvert) && (yztempchi < 30)/* && (xztempchi < 10)*/ ){
+      if( ((yxtempchi>0) && yztempchi && zxtempchi > 0) && (yxtempchi < 30) && (yztempchi < 30) && (zxtempchi < 30) ){
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;

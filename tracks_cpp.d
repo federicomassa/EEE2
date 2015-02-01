@@ -71,5 +71,7 @@
 ./tracks_cpp.so: /home/federico/root/include/TQObject.h
 ./tracks_cpp.so: /home/federico/root/include/TAttCanvas.h
 ./tracks_cpp.so: /home/federico/root/include/TCanvasImp.h
+./tracks_cpp.so: /home/federico/root/include/TMath.h
+./tracks_cpp.so: /home/federico/root/include/TError.h
 ./tracks_cpp.so: /home/federico/root/include/cintdictversion.h /home/federico/root/include/RVersion.h
 tracks_cpp__ROOTBUILDVERSION= 5.34/08

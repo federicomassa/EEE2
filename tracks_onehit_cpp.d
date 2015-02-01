@@ -59,7 +59,7 @@
 ./tracks_onehit_cpp.so: /home/federico/root/include/TUUID.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TMap.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/THashTable.h
-./tracks_onehit_cpp.so: /home/federico/root/include/TUrl.h fit.cpp hit.cpp
+./tracks_onehit_cpp.so: /home/federico/root/include/TUrl.h fit3.cpp hit.cpp
 ./tracks_onehit_cpp.so: /home/federico/root/include/TCanvas.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TPad.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TVirtualPad.h
@@ -71,5 +71,27 @@
 ./tracks_onehit_cpp.so: /home/federico/root/include/TQObject.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TAttCanvas.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TCanvasImp.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMath.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TError.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TLinearFitter.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TVectorD.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TVectorT.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixT.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixTBase.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixTUtils.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixTSym.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixTSparse.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixD.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDfwd.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDUtils.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDUtilsfwd.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDSym.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDSymfwd.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDSparse.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMatrixDSparsefwd.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TVirtualFitter.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TMethodCall.h
+./tracks_onehit_cpp.so: /home/federico/root/include/TDictionary.h
+./tracks_onehit_cpp.so: /home/federico/root/include/Property.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/cintdictversion.h /home/federico/root/include/RVersion.h
 tracks_onehit_cpp__ROOTBUILDVERSION= 5.34/08

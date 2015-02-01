@@ -6,7 +6,7 @@
 #include <TGraph2D.h>
 #include <TFile.h>
 #include <iostream>
-#include "fit.cpp"  //contiene le classi point e triplet
+#include "fit3.cpp"  //contiene le classi point e triplet, versione aggiornata con LSM
 #include <fstream>
 
 #include <string>
@@ -29,8 +29,8 @@ void tracks(){
   string test;
   bool bestvert = false;
   //  double *besty = new double[3];
-  //   ifstream run("../EEEData/CORR_EEE_Prova_midbottom9000__20140530_184644.txt"); //INPUT FILE
-    ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
+  // ifstream run("../EEEData/CORR_EEE_Prova_midbottom9000__20140530_184644.txt"); //INPUT FILE
+     ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
   //  int point::n = 0;
     // TFile rfile("Disttopbot.root","RECREATE");
  TFile rfile("tracks_onehit.root","RECREATE");
@@ -61,13 +61,13 @@ void tracks(){
   TH1F* disdisty1 = new TH1F("disdisty1","Y Distance distribution, Ch1;Y Distance;#",800,-400,400);
   TH1F* disdisty2 = new TH1F("disdisty2","Y Distance distribution, Ch2;Y Distance;#",800,-400,400);
   TH1F* disdisty3 = new TH1F("disdisty3","Y Distance distribution, Ch3;Y Distance;#",800,-400,400);
- TH1F* errx = new TH1F("errx","X Resolution, Ch2;Distance (cm);#",50,-20,20);
+ TH1F* errx = new TH1F("errx","X Resolution, Ch2;Distance (cm);#",80,-20,20);
  TH1F* erry = new TH1F("erry","Y Resolution, Ch2;Distance (cm);#",400,-20,20);
 
   TH2F* thetaphi = new TH2F("phi-theta","Phi-Theta Correlation;Phi(deg);Theta(deg)", 90,0,360,50,0,90);
   triplet n1;
-  double chi = 1000, tempchi = 0,xytempchi = 0, /*xztempchi = 0, */ yztempchi = 0, theta = 1000, phi = 1000;
-  double midx1, midx2, midx3, midy1, midy2, midy3, XYint, XZint, YZint, XYpen, YZpen, XZpen;
+  double chi = 1000, tempchi = 0,yxtempchi = 0, zxtempchi = 0,  yztempchi = 0, theta = 1000, phi = 1000;
+  double midx1, midx2, midx3, midy1, midy2, midy3, YXint, ZXint, YZint, YXpen, YZpen, ZXpen;
   int j = 0;
   double number = 0;
   string line;
@@ -195,15 +195,12 @@ void tracks(){
        for (int c = 0; c < (ch3); c++) {
    	 	 n1.SetPoints(hit[a],hit[b+ch1],hit[c+ch1+ch2]); //considero tutte le combinazioni di triplette
    		  //		  cout << "PRIMA FIT" << endl;
-   		  n1.XYFit();
-   		  n1.YZFit();
-	       	  n1.XZFit();
+   		  n1.Fit();
    		  //  cout << "DOPO FIT" << endl;
-		  if (!n1.vert)
-		  tempchi = (n1.XYGetChisquare_m()/*+n1.XZGetChisquare_m()*/ +n1.YZGetChisquare_m())/2; //tolto xz per sicurezza: potrebbe essere verticale
-		  else tempchi = n1.YZGetChisquare()/2;
+
+		  tempchi = (n1.YXGetChisquare_m()+n1.ZXGetChisquare_m() +n1.YZGetChisquare_m())/3; //tolto xz per sicurezza: potrebbe essere verticale
    		  //		  cout << "DOPO CHI" << endl;
-   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; xytempchi = n1.XYGetChisquare_m(); yztempchi = n1.YZGetChisquare_m(); /* xztempchi = n1.XZGetChisquare_m();*/ theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ bestvert = n1.vert;}
+   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; yxtempchi = n1.YXGetChisquare_m(); yztempchi = n1.YZGetChisquare_m();  zxtempchi = n1.ZXGetChisquare_m(); theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ bestvert = n1.xvert;}
        }}}
    // if (parameter > 100000) {cout << "THETA: " << theta << endl; cout << "PHI: " << phi << endl; cout << "y SOSPETTE: " << besty[0] << " " << besty[1] << " " << besty[2] << endl; cout << "k: " << k << endl;}
    disxy1->Fill(n1.GetCoordinate(0,0),n1.GetCoordinate(1,0));
@@ -219,31 +216,36 @@ void tracks(){
    disy3->Fill(n1.GetCoordinate(1,2));
    if (chi < 9 && chi > 8) {cout << "Chi grande: " << k << endl; /*getline(cin,test);*/}
 
- 	 XYint = n1.XYGetParameter(0);
-	 YZint = n1.YZGetParameter(0);
-	 XZint = n1.XZGetParameter(0);
-
  
-	 XYpen= n1.XYGetParameter(1);
-	 YZpen= n1.YZGetParameter(1);
-	 XZpen = n1.XZGetParameter(1);
-
-	 midx1 = (zch1-XZint)/XZpen;
-	 midx2 = (zch2-XZint)/XZpen;
-	 midx3 = (zch3-XZint)/XZpen;
-
-	 midy1 = (zch1-YZint)/YZpen;
-	 midy2 = (zch2-YZint)/YZpen;
-	 midy3 = (zch3-YZint)/YZpen;
-
-	 errx->Fill((midx1+midx3)/2-n1.GetCoordinate(0,1));
-	 erry->Fill((midy1+midy3)/2-n1.GetCoordinate(1,1));
 
       dischi->Fill(chi);
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "k: " << k << endl; cin.get();}
-      if( ((xytempchi>0 || bestvert) && yztempchi/**xztempchi*/ > 0) && (xytempchi < 100 || bestvert) && (yztempchi < 100)/* && (xztempchi < 10)*/ ){
+      if( ((yxtempchi>0) && yztempchi && zxtempchi > 0) && (yxtempchi < 5) && (yztempchi < 5) && (zxtempchi < 5) ){
+	//	 YXint = n1.YXGetParameter(0);
+	 YZint = n1.YZGetParameter(0);
+	 ZXint = n1.ZXGetParameter(0);
+
+ 
+	 //	 YXpen= n1.YXGetParameter(1);
+	 YZpen= n1.YZGetParameter(1);
+	 ZXpen = n1.ZXGetParameter(1);
+
+	 // midx1 = (zch1-ZXint)/ZXpen; //prima di invertire gli assi
+	 // midx2 = (zch2-ZXint)/ZXpen;
+	 // midx3 = (zch3-ZXint)/ZXpen;
+
+	 midx1 = ZXint + ZXpen*zch1;
+	 // midx2 = ZXint + ZXpen*zch2;
+	 midx3 = ZXint + ZXpen*zch3;
+
+	 midy1 = (zch1-YZint)/YZpen;
+	 // midy2 = (zch2-YZint)/YZpen;
+	 midy3 = (zch3-YZint)/YZpen;
+
+	 errx->Fill((midx1+midx3)/2-n1.GetCoordinate(0,1));
+	 erry->Fill((midy1+midy3)/2-n1.GetCoordinate(1,1));
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;

@@ -72,4 +72,4 @@
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TAttCanvas.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TCanvasImp.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/cintdictversion.h /home/federico/root/include/RVersion.h
-stripaccdiscreta_cpp__ROOTBUILDVERSION= 5.34/18
+stripaccdiscreta_cpp__ROOTBUILDVERSION= 5.34/08

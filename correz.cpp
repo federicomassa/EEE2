@@ -34,9 +34,10 @@ void correz(){
   char ofile[80];
   strcpy(ofile,dest2);
    char infile1[80] = "EEE_PISA01TestRun4Telescopes_20140507_014455.txt";
+ char infile2[80] = "EEE_PISA01TestRun4Telescopes_20140507_014455.txt";
    // char infile2[80] = "EEE_Prova_topbottom8900__20140530_174533.txt";
    //  char infile2[80] = "EEE_Prova_topmid9000__20140530_181026.txt";
-   char infile2[80] = "EEE_Prova_midbottom9000__20140530_184644.txt"; //questo è quello che andrà corretto
+   //   char infile2[80] = "EEE_Prova_midbottom9000__20140530_184644.txt"; //questo è quello che andrà corretto
   strcat(dest1,infile1);
   strcat(dest2,infile2);
   ifstream run(dest1); //INPUT FILE 
@@ -45,16 +46,16 @@ void correz(){
   strcat(ofile,crr);
   strcat(ofile,infile2);
   ofstream crrfile(ofile);
-  int check = 0;
+  // int check = 0;
   int bc1, bc2, bc3;
   double up1[24],up2[24],up3[24],low1[24],low2[24],low3[24];
   int evnum = 0;
  
   TFile rfile("correzione_andall.root","RECREATE");
-  TH2F* disxy1 = new TH2F("disxy1","XY Occupancy: Ch 1", 200,-100,100,400,-400,400);
-  TH2F* disxy2 = new TH2F("disxy2","XY Occupancy: Ch 2", 200,-100,100,400,-400,400);
-  TH2F* disxy3 = new TH2F("disxy3","XY Occupancy: Ch 3", 200,-100,100,400,-400,400);
-  triplet n1;
+  TH2F* disxy1 = new TH2F("disxy1","XY Occupancy: Ch 1", 200,-100,100,200,-400,400);
+  TH2F* disxy2 = new TH2F("disxy2","XY Occupancy: Ch 2", 200,-100,100,200,-400,400);
+  TH2F* disxy3 = new TH2F("disxy3","XY Occupancy: Ch 3", 200,-100,100,200,-400,400);
+  // triplet n1;
   int j = 0;
   double number = 0, numbery = 0, numberx = 0;
   string line;
@@ -113,27 +114,29 @@ void correz(){
 	  
   //   cout << "DOPO FOR" << endl;
  //Controllo la bontà dell'evento: ha almeno un hit per camera (top_bottom)?
-  if (ch1 < 1 ||ch2 < 1 || ch3 < 1){/*cout << "EVENTO NON BUONO" << endl;*/ 
-    j = 0; 
-    delete [] hit;
+  // if (ch1 < 1 ||ch2 < 1 || ch3 < 1){/*cout << "EVENTO NON BUONO" << endl;*/ 
+  //   j = 0; 
+  //   delete [] hit;
     
-    getline(run,line);
-    entry = ""; 
+  //   getline(run,line);
+  //   entry = ""; 
 
-    continue;} //Evento non buono: prossimo evento
+  //   continue;} //Evento non buono: prossimo evento
 
-  else { //evento con almeno un hit per camera
+  // else {
+    //evento con almeno un hit per camera
  
    for (int a = 0; a < (ch1); a++) {
-     for (int b = 0; b < (ch2); b++) {
-       for (int c = 0; c < (ch3); c++) {
-   	 	 n1.SetPoints(hit[a],hit[b+ch1],hit[c+ch1+ch2]); //considero tutte le combinazioni di triplette
-		 disxy1->Fill(n1.GetCoordinate(0,0),n1.GetCoordinate(1,0));
-		 disxy2->Fill(n1.GetCoordinate(0,1),n1.GetCoordinate(1,1));
-		 disxy3->Fill(n1.GetCoordinate(0,2),n1.GetCoordinate(1,2));
-       }}}
+     disxy1->Fill(hit[a].x,hit[a].y);}
 
-  } //fine else evento buono
+   for (int a = ch1; a < ch1+ch2; a++) {
+     disxy2->Fill(hit[a].x,hit[a].y);}
+
+   for (int a = ch1+ch2; a < ch1+ch2+ch3; a++) {
+     disxy3->Fill(hit[a].x,hit[a].y);}
+
+
+
 
 
 
@@ -145,61 +148,46 @@ void correz(){
   //Bin per chamber histograms
    
 
-    }
+   }
 
 
 
      	  while (!run.eof());
    for (int a = 0; a < 24; a++) {
-     for (int b = 1; b <= 200; b++) {
-       bc1 = disxy1->GetBinContent(41+5*a,b+200);
-       if (bc1 == 0) check += 1; 
-       if (bc1 != 0 && check < 2) check = 0;
-       if (check == 2) {up1[a] = double (b-2)*2; check = 0; break;}
+     for (int b = 1; b <= 100; b++) {
+       bc1 = disxy1->GetBinContent(41+5*a,b+100);
+       if (bc1 <= 12) {up1[a] = double(b)*4; break;}
      }
-     for (int b = 1; b <= 200; b++) {
-       bc1 = disxy1->GetBinContent(41+5*a,201-b);
-       if (bc1 == 0) check += 1;
-       if (bc1 != 0 && check < 2) check = 0;
-       if (check == 2) {low1[a] = double(2-b)*2; check = 0;break;}
-     }
-       
-   }
-     
-  for (int a = 0; a < 24; a++) {
-     for (int b = 1; b <= 200; b++) {
-       bc2 = disxy2->GetBinContent(41+5*a,b+200);
-       if (bc2 == 0) check += 1; 
-       if (bc2!= 0 && check < 2) check = 0;
-       if (check == 2) {up2[a] = double(b-2)*2; check = 0; break;}
-     }
-     for (int b = 1; b <= 200; b++) {
-       bc2 = disxy2->GetBinContent(41+5*a,201-b);
-       if (bc2 == 0) check += 1;
-       if (bc2 != 0 && check < 2) check = 0;
-       if (check == 2) {low2[a] = double(2-b)*2; check = 0; break;}
+     for (int b = 1; b <= 100; b++) {
+       bc1 = disxy1->GetBinContent(41+5*a,101-b);
+       if (bc1 <= 12) {low1[a] = -double(b)*4;break;}
      }
        
    }
 
-
-  for (int a = 0; a < 24; a++) {
-     for (int b = 1; b <= 200; b++) {
-       bc3 = disxy3->GetBinContent(41+5*a,b+200);
-       if (bc3 == 0) check += 1; 
-       if (bc3 != 0 && check < 2) check = 0;
-       if (check == 2) {up3[a] = double(b-2)*2; check = 0; break;}
+   for (int a = 0; a < 24; a++) {
+     for (int b = 1; b <= 100; b++) {
+       bc2 = disxy2->GetBinContent(41+5*a,b+100);
+       if (bc2 <= 12) {up2[a] = double(b)*4; break;}
      }
-     for (int b = 1; b <= 200; b++) {
-       bc3 = disxy3->GetBinContent(41+5*a,201-b);
-       if (bc3 == 0) check += 1;
-       if (bc3 != 0 && check < 2) check = 0;
-       if (check == 2) {low3[a] = double(2-b)*2; check = 0;break;}
+     for (int b = 1; b <= 100; b++) {
+       bc2 = disxy2->GetBinContent(41+5*a,101-b);
+       if (bc2 <= 12) {low2[a] = -double(b)*4;break;}
      }
        
-  }
+   }
 
-
+   for (int a = 0; a < 24; a++) {
+     for (int b = 1; b <= 100; b++) {
+       bc3 = disxy3->GetBinContent(41+5*a,b+100);
+       if (bc3 <= 12) {up3[a] = double(b)*4; break;}
+     }
+     for (int b = 1; b <= 100; b++) {
+       bc3 = disxy3->GetBinContent(41+5*a,101-b);
+       if (bc3 <= 12) {low3[a] = -double(b)*4;break;}
+     }
+       
+   }
  //   for (int bb = 0; bb < 24; bb++) {
  // cout << up1[bb]-low1[bb] << endl;
  // cout << "UP: " << up1[bb] << endl;

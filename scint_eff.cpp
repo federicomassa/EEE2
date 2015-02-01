@@ -6,7 +6,7 @@
 #include <TGraph2D.h>
 #include <TFile.h>
 #include <iostream>
-#include "fit.cpp"  //contiene le classi point e triplet
+#include "fit3.cpp"  //contiene le classi point e triplet aggiornate
 #include <fstream>
 
 #include <string>
@@ -61,7 +61,7 @@ void scint_eff(){
   TH1F* disdisty2 = new TH1F("disdisty2","Y Distance distribution, Ch2;Y Distance;#",800,-400,400);
   TH1F* disdisty3 = new TH1F("disdisty3","Y Distance distribution, Ch3;Y Distance;#",800,-400,400);
   triplet n1;
-  double chi = 1000, tempchi = 0,xytempchi = 0, xztempchi = 0, yztempchi = 0, theta = 1000, phi = 1000;
+  double chi = 1000, tempchi = 0,yxtempchi = 0, zxtempchi = 0, yztempchi = 0, theta = 1000, phi = 1000;
   int j = 0;
   double number = 0;
   string line;

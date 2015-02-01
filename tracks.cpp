@@ -26,7 +26,9 @@ int GetHitCount(string str){ //Calcola il numero di hits per evento
 
 
 void tracks(){  
+  string test;
   bool bestvert = false;
+  int besta = 100, bestb = 100, bestc = 100;
   //  double *besty = new double[3];
   // ifstream run("../Data/EEE_Prova_topbottom8900__20140530_174533.txt"); //INPUT FILE
     ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
@@ -198,9 +200,10 @@ void tracks(){
 		  tempchi = (n1.XYGetChisquare_m()/*+n1.XZGetChisquare_m()*/ +n1.YZGetChisquare_m())/2; //tolto xz per sicurezza: potrebbe essere verticale
 		  else tempchi = n1.YZGetChisquare()/2;
    		  //		  cout << "DOPO CHI" << endl;
-   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; xytempchi = n1.XYGetChisquare_m(); yztempchi = n1.YZGetChisquare_m(); /* xztempchi = n1.XZGetChisquare_m();*/ theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ bestvert = n1.vert;}
+   		  if (tempchi < chi && tempchi != 0) {chi = tempchi; xytempchi = n1.XYGetChisquare_m(); yztempchi = n1.YZGetChisquare_m(); /* xztempchi = n1.XZGetChisquare_m();*/ theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ bestvert = n1.vert; besta = a; bestb = b; bestc = c;}
        }}}
    // if (parameter > 100000) {cout << "THETA: " << theta << endl; cout << "PHI: " << phi << endl; cout << "y SOSPETTE: " << besty[0] << " " << besty[1] << " " << besty[2] << endl; cout << "k: " << k << endl;}
+   
    disxy1->Fill(n1.GetCoordinate(0,0),n1.GetCoordinate(1,0));
    disxy2->Fill(n1.GetCoordinate(0,1),n1.GetCoordinate(1,1));
    disxy3->Fill(n1.GetCoordinate(0,2),n1.GetCoordinate(1,2));
@@ -224,6 +227,7 @@ void tracks(){
 	//   if (theta <= 0.025){cout << "TROVATO THETA = 0 in evento" << k << " con theta: " << theta << " e phi: " << phi << " xyparamter: " << n1.XYGetParameter(1) << " yzparameter: " << n1.YZGetParameter(1) << endl; cin.get();}   
 	//	if (theta < 1E-4) {cout << "y SOSPETTE: " << besty[0] << " " << besty[1] << " " << besty[2] << endl; cout << "theta acc: " << theta << endl; cout << "k da contr: " << k << endl; cin.get();}
 	//	if (theta > 1.22) {cout << "HUGE THETA at k: " << k << endl;}
+	if (bestvert){ cout << "VERTICALEEEEEEEEEEEEEE!!!!!! " << "YZTEMPCHI: " << yztempchi << endl; getline(cin,test);}
 	distheta->Fill(theta*180/3.14159);
 	disphi->Fill(phi*180/3.14159);
 	thetaphi->Fill(phi*180/3.14159,theta*180/3.14159);
