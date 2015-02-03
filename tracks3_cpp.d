@@ -59,7 +59,7 @@
 ./tracks3_cpp.so: /home/federico/root/include/TUUID.h
 ./tracks3_cpp.so: /home/federico/root/include/TMap.h
 ./tracks3_cpp.so: /home/federico/root/include/THashTable.h
-./tracks3_cpp.so: /home/federico/root/include/TUrl.h fit3.cpp hit.cpp
+./tracks3_cpp.so: /home/federico/root/include/TUrl.h fit3.cpp hit3.cpp
 ./tracks3_cpp.so: /home/federico/root/include/TCanvas.h
 ./tracks3_cpp.so: /home/federico/root/include/TPad.h
 ./tracks3_cpp.so: /home/federico/root/include/TVirtualPad.h

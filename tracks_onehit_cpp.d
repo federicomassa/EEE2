@@ -59,7 +59,7 @@
 ./tracks_onehit_cpp.so: /home/federico/root/include/TUUID.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TMap.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/THashTable.h
-./tracks_onehit_cpp.so: /home/federico/root/include/TUrl.h fit3.cpp hit.cpp
+./tracks_onehit_cpp.so: /home/federico/root/include/TUrl.h fit3.cpp hit3.cpp
 ./tracks_onehit_cpp.so: /home/federico/root/include/TCanvas.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TPad.h
 ./tracks_onehit_cpp.so: /home/federico/root/include/TVirtualPad.h

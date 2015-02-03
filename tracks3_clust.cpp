@@ -1,5 +1,6 @@
 //LA FINE DI OGNI RIGA DEVE CONTENERE UNO SPAZIO BIANCO
 #include <TF1.h>
+#include <TMath.h>
 #include <TGraphErrors.h>
 #include <TH1F.h>
 #include <TH2F.h>
@@ -23,13 +24,18 @@ int GetHitCount(string str){ //Calcola il numero di hits per evento
   return (s-9)/3;
 }; // 9 blocchi prima dell'inizio delle 3 coordinate
 
+double point_dist(point a, point b) {
 
+  return TMath::Sqrt((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y));
+
+}
 
 void tracks(){  
   bool bestvalid = false;
   bool bestxvert = false;
   string test;
   int besta = 100, bestb = 100, bestc = 100;
+  int j1 = 0, j2 = 0, j3 = 0;
   //  double *besty = new double[3];
   // ifstream run("../Data/EEE_Prova_topbottom8900__20140530_174533.txt"); //INPUT FILE
     ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
@@ -42,8 +48,10 @@ void tracks(){
   TH1F* hpc1 = new TH1F("hpc1", "Hit per chamber / Chamber 1; #Hits;# ", 20,0,20);
   TH1F* hpc2 = new TH1F("hpc2", "Hit per chamber / Chamber 2;#Hits;#", 20,0,20);
   TH1F* hpc3 = new TH1F("hpc3", "Hit per chamber /Chamber 3;#Hits;#", 20,0,20);
-  TH1F* disprimatheta = new TH1F("disprimatheta","Theta distribution;Theta(deg);#", 50, 0,90);
-  TH1F* disprimaphi = new TH1F("disprimaphi","Phi distribution;Phi(deg);#", 90, 0, 360);
+  TH1F* disprimatheta = new TH1F("disprimatheta","Theta distribution before cluster;Theta(deg);#", 50, 0,90);
+  TH1F* disprimaphi = new TH1F("disprimaphi","Phi distribution before cluster;Phi(deg);#", 90, 0, 360);
+ TH1F* clust_theta = new TH1F("clust_theta","Theta distribution after cluster;Theta(deg);#", 50, 0,90);
+  TH1F* clust_phi = new TH1F("clust_phi","Phi distribution after cluster;Phi(deg);#", 90, 0, 360);
   TH2F* disxy1 = new TH2F("disxy1","XY Occupancy: Ch 1", 200,-100,100,100,-400,400);
   TH1F* disx1 = new TH1F("disx1", "X Occupancy: Ch 1", 200,-100,100);
   TH1F* disy1 = new TH1F("disy1", "Y Occupancy: Ch 1", 50,-400,400);
@@ -67,6 +75,8 @@ void tracks(){
   TH2F* piccolitheta = new TH2F("piccolitheta","Piccoli theta;Phi(deg);Theta(deg)", 90,0,360,50,0,0.1);
   triplet n1;
   double chi = 1E30, tempchi = 0,yxtempchi = 0, zxtempchi = 0,  yztempchi = 0, theta = 1000, phi = 1000;
+  double xav1 = 0, yav1 = 0, xav2 = 0, yav2 = 0, xav3 = 0, yav3 = 0;
+  double clust_rad = 7.5; //
   int j = 0;
   double number = 0;
   string line;
@@ -202,7 +212,7 @@ void tracks(){
 		  //	  tempchi = (n1.YZGetChisquare()+n1.ZXGetChisquare()+n1.YXGetChisquare())/3;
 		  tempchi = (n1.YXGetChisquare_m() + n1.YZGetChisquare_m() + n1.ZXGetChisquare_m())/3;
    		  //		  cout << "DOPO CHI" << endl;
-   		  if (tempchi < chi && tempchi != 0 && !n1.yzfr) {chi = tempchi; yxtempchi = n1.YXGetChisquare_m(); yztempchi = n1.YZGetChisquare_m(); zxtempchi = n1.ZXGetChisquare_m(); theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ besta = a; bestb = b; bestc = c; bestvalid = (n1.yxfr || n1.zxfr || n1.yzfr); bestxvert = n1.xvert;} else continue;
+   		  if (tempchi < chi && tempchi != 0 && !n1.yzfr) {chi = tempchi; yxtempchi = n1.YXGetChisquare_m(); yztempchi = n1.YZGetChisquare_m(); zxtempchi = n1.ZXGetChisquare_m(); theta = n1.GetTheta(); phi = n1.GetPhi();/*parameter = n1.YZGetParameter(1);besty = n1.yv;*/ besta = a; bestb = b; bestc = c; bestvalid = (n1.yxfr || n1.zxfr || n1.yzfr); bestxvert = n1.xvert;}
        }}}
    // if (parameter > 100000) {cout << "THETA: " << theta << endl; cout << "PHI: " << phi << endl; cout << "y SOSPETTE: " << besty[0] << " " << besty[1] << " " << besty[2] << endl; cout << "k: " << k << endl;}
    if (bestxvert) {cout << "VERTICALE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " << endl; cout << phi << endl; cout << "valido: " << bestvalid << endl;  cout << "xyChi: " << yxtempchi << endl; cout << "yzchi: " << yztempchi << endl; cout << "zxchi: " << zxtempchi << endl;}
@@ -224,7 +234,7 @@ void tracks(){
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "k: " << k << endl; cin.get();}
-      if( ((yxtempchi>0) && yztempchi && zxtempchi > 0) && (yxtempchi < 2.5) && (yztempchi < 2.5) && (zxtempchi < 2.5) && !bestvalid){
+      if( ((yxtempchi < 2.5) && (yztempchi < 2.5) && (zxtempchi < 2.5) && !bestvalid)) {
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;
@@ -237,22 +247,54 @@ void tracks(){
 	primathetaphi->Fill(phi*180/3.141592654,theta*180/3.141592654);
       }
  
-
+      //C        L          U          S       T        E         R
 
       hit[linecount].SetValues(hit[besta].x,hit[besta].y,hit[besta].z);
       hit[linecount+1].SetValues(hit[bestb+ch1].x,hit[bestb+ch1].y,hit[bestb+ch1].z);
       hit[linecount+2].SetValues(hit[bestc+ch1+ch2].x,hit[bestc+ch1+ch2].y,hit[bestc+ch1+ch2].z);
 
       if(hit[linecount].z == hit[linecount+1].z || hit[linecount+1].z == hit[linecount+2].z) {cout << "ERROREEEEEEEEEEEEEEEEEEE a k = " << k << endl; cout << "CHI: " << chi << endl; cout << "THETA,PHI: " << theta*180/3.14159 << " " << phi*180/3.14159 << endl; getline(cin,test);}
-      
-      // n1.SetPoints(hit[linecount],hit[linecount+1],hit[linecount+2]); //tripletta punti migliori
-      // n1.XYFit();
-      // n1.YZFit();
-      
-      // XYint = n1.XYGetInter
+     
+      for(int a = 0; a < ch1; a++) {
+	
+	if(point_dist(hit[linecount],hit[a]) <= clust_rad) {xav1 = (xav1*j1+hit[a].x)/(double(j1)+1); yav1 = (yav1*double(j1)+hit[a].y)/(double(j1)+1); j1++;
+	}
 
+      }
+      
+      for(int b = ch1; b < ch1+ch2; b++) {
+	
+	if(point_dist(hit[linecount+1],hit[b]) <= clust_rad) {xav2 = (xav2*double(j2)+hit[b].x)/(double(j2)+1); yav2 = (yav2*double(j2)+hit[b].y)/(double(j2)+1); j2++;
+	}
+
+      }
+
+  for(int c = ch1+ch2; c < ch1+ch2+ch3; c++) {
+	
+    if(point_dist(hit[linecount+2],hit[c]) <= clust_rad) {xav3 = (xav3*double(j3)+hit[c].x)/(double(j3)+1); yav3 = (yav3*double(j3)+hit[c].y)/(double(j3)+1); j3++;
+	}
+
+      }  
+
+  hit[linecount].SetValues(xav1,yav1,53.2);
+  hit[linecount+1].SetValues(xav2,yav2,0);
+  hit[linecount+2].SetValues(xav3,yav3,-52.8);
+
+      
+  n1.SetPoints(hit[linecount],hit[linecount+1],hit[linecount+2]); //tripletta punti migliori
+  n1.Fit();
+  yxtempchi = n1.YXGetChisquare_m();
+  zxtempchi = n1.ZXGetChisquare_m();
+  yztempchi = n1.YZGetChisquare_m();
+      // n1.YZFit();
+  if (!bestvalid && yztempchi < 2.5 && zxtempchi < 2.5 && yxtempchi < 2.5) { //se il fit è valido..
+    clust_theta->Fill(n1.GetTheta()*180/3.14159);
+    clust_phi->Fill(n1.GetPhi()*180/3.14159);}
+      // XYint = n1.XYGetInter
+  
 
   }
+  j1 = 0; j2 = 0; j3 = 0;
   j = 0;
     delete[] x;
     delete[] y;
@@ -315,6 +357,8 @@ void tracks(){
     dischi->Write();
      disprimatheta->Write();
      disprimaphi->Write();
+     clust_theta->Write();
+     clust_phi->Write();
      piccolitheta->Write();
      rfile.Close();
      run.close();

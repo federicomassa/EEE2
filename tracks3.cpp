@@ -39,6 +39,9 @@ void tracks(){
  TF1* manyhitsline = new TF1("prova","[0]+[1]*x",0,15);
   TH2F* manyhits2 = new TH2F("manyhits","Many-hits events correlation: Ch 2", 30,0,15,100,0,50);
   TH1F* dischi = new TH1F("dischi","Chi2 distribution; chi2; #", 100,0,10);
+TH1F* disyxchi = new TH1F("disyxchi","YX Chi2 distribution; chi2; #", 300,0,30);
+TH1F* diszxchi = new TH1F("diszxchi","ZX Chi2 distribution; chi2; #", 300,0,30);
+TH1F* disyzchi = new TH1F("disyzchi","YZ Chi2 distribution; chi2; #", 300,0,30);
   TH1F* hpc1 = new TH1F("hpc1", "Hit per chamber / Chamber 1; #Hits;# ", 20,0,20);
   TH1F* hpc2 = new TH1F("hpc2", "Hit per chamber / Chamber 2;#Hits;#", 20,0,20);
   TH1F* hpc3 = new TH1F("hpc3", "Hit per chamber /Chamber 3;#Hits;#", 20,0,20);
@@ -63,6 +66,15 @@ void tracks(){
   TH1F* disdisty1 = new TH1F("disdisty1","Y Distance distribution, Ch1;Y Distance;#",800,-400,400);
   TH1F* disdisty2 = new TH1F("disdisty2","Y Distance distribution, Ch2;Y Distance;#",800,-400,400);
   TH1F* disdisty3 = new TH1F("disdisty3","Y Distance distribution, Ch3;Y Distance;#",800,-400,400);
+  TH1F* av_dist1 = new TH1F("av_dist1","Average Distance distribution, Ch 1;Distance (cm);#",200,0,600);
+  TH1F* av_dist2 = new TH1F("av_dist2","Average Distance distribution, Ch 2;Distance (cm);#",200,0,600);
+  TH1F* av_dist3 = new TH1F("av_dist3","Average Distance distribution, Ch 3;Distance (cm);#",200,0,600);
+  TH1F* av_distx1 = new TH1F("av_distx1","Average X Distance distribution, Ch 1;Distance (cm);#",200,-100,100);
+  TH1F* av_distx2 = new TH1F("av_distx2","Average X Distance distribution, Ch 2;Distance (cm);#",200,-100,100);
+  TH1F* av_distx3 = new TH1F("av_distx3","Average X Distance distribution, Ch 3;Distance (cm);#",200,-100,100);
+  TH1F* av_disty1 = new TH1F("av_disty1","Average Y Distance distribution, Ch 1;Distance (cm);#",800,-400,400);
+  TH1F* av_disty2 = new TH1F("av_disty2","Average Y Distance distribution, Ch 2;Distance (cm);#",800,-400,400);
+  TH1F* av_disty3 = new TH1F("av_disty3","Average Y Distance distribution, Ch 3;Distance (cm);#",800,-400,400);
   TH2F* primathetaphi = new TH2F("prima_phi-teta","Phi-Theta Correlation before clustering;Phi(deg);Theta(deg)", 90,0,360,50,0,90);
   TH2F* piccolitheta = new TH2F("piccolitheta","Piccoli theta;Phi(deg);Theta(deg)", 90,0,360,50,0,0.1);
   triplet n1;
@@ -76,6 +88,8 @@ void tracks(){
   int ch3 = 0;
   int linecount = 0;
   int k = -1;
+  int k1 = 0, k2 = 0, k3 = 0;
+  double d1 = 0, d2 = 0, d3 = 0, dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0, dx3 = 0, dy3 = 0;
   do{
     getline(run,line);
   }
@@ -143,26 +157,55 @@ void tracks(){
   // hit sono in ordine di camera nel file
   for (int h = ch1; h > 0; h--){
     for(int p = ch1-1; p < h && p >= 0; p--){
-	  disdist1->Fill(pow(pow(hit[h].x-hit[p].x,2)+pow(hit[h].y-hit[p].y,2),0.5));
-    disdistx1->Fill(hit[h].x-hit[p].x);
-    disdisty1->Fill(hit[h].y-hit[p].y);
+            
+      d1 = (pow(pow(hit[h].x-hit[p].x,2)+pow(hit[h].y-hit[p].y,2),0.5)+d1*k1)/(k1+1); 
+      disdist1->Fill(pow(pow(hit[h].x-hit[p].x,2)+pow(hit[h].y-hit[p].y,2),0.5)); 
 
+      dx1 = (hit[h].x-hit[p].x+dx1*k1)/(k1+1); disdistx1->Fill(hit[h].x-hit[p].x);
+
+      dy1 = (hit[h].y-hit[p].y+dy1*k1)/(k1+1); disdisty1->Fill(hit[h].y-hit[p].y);
+      k1++;
     }}
 
- for (int h = ch2; h > 0; h--){
+  av_dist1->Fill(d1);
+  av_distx1->Fill(dx1);
+  av_disty1->Fill(dy1);
+
+  for (int h = ch2; h > 0; h--){
     for(int p = ch2-1; p < h && p >= 0; p--){
-	  disdist2->Fill(pow(pow(hit[h+ch1].x-hit[p+ch1].x,2)+pow(hit[h+ch1].y-hit[p+ch1].y,2),0.5));
-	      disdistx2->Fill(hit[h+ch1].x-hit[p+ch1].x);
-    disdisty2->Fill(hit[h+ch1].y-hit[p+ch1].y);
+            
+      d2 = (pow(pow(hit[h+ch1].x-hit[p+ch1].x,2)+pow(hit[h+ch1].y-hit[p+ch1].y,2),0.5)+d2*k2)/(k2+1); 
+      disdist2->Fill(pow(pow(hit[h+ch1].x-hit[p+ch1].x,2)+pow(hit[h+ch1].y-hit[p+ch1].y,2),0.5)); 
+
+      dx2 = (hit[h+ch1].x-hit[p+ch1].x+dx2*k2)/(k2+1); disdistx2->Fill(hit[h+ch1].x-hit[p+ch1].x);
+
+      dy2 = (hit[h+ch1].y-hit[p+ch1].y+dy2*k2)/(k2+1); disdisty2->Fill(hit[h+ch1].y-hit[p+ch1].y);
+      k2++;
     }}
 
- for (int h = ch3; h > 0; h--){
+  av_dist2->Fill(d2);
+  av_distx2->Fill(dx2);
+  av_disty2->Fill(dy2);
+
+  for (int h = ch3; h > 0; h--){
     for(int p = ch3-1; p < h && p >= 0; p--){
-	  disdist3->Fill(pow(pow(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x,2)+pow(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y,2),0.5));
-    disdistx3->Fill(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x);
-    disdisty3->Fill(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y);
-    }}
-	  
+            
+      d3 = (pow(pow(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x,2)+pow(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y,2),0.5)+d3*k3)/(k3+1); 
+      disdist3->Fill(pow(pow(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x,2)+pow(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y,2),0.5)); 
+
+      dx3 = (hit[h+ch1+ch2].x-hit[p+ch1+ch2].x+dx3*k3)/(k3+1); disdistx3->Fill(hit[h+ch1+ch2].x-hit[p+ch1+ch2].x);
+
+      dy3 = (hit[h+ch1+ch2].y-hit[p+ch1+ch2].y+dy3*k3)/(k3+1); disdisty3->Fill(hit[h+ch1+ch2].y-hit[p+ch1+ch2].y);
+      k3++;
+    }}	
+
+  av_dist3->Fill(d3);
+  av_distx3->Fill(dx3);
+  av_disty3->Fill(dy3);
+
+  d1 = 0; d2 = 0; d3 = 0; dx1 = 0; dx2 = 0; dx3 = 0; dy1 = 0; dy2 = 0; dy3 = 0;
+  k1 = 0; k2 = 0; k3 = 0;
+  
 
   //   cout << "DOPO FOR" << endl;
  //Controllo la bontà dell'evento: ha almeno un hit per camera?
@@ -219,12 +262,17 @@ void tracks(){
    disy1->Fill(n1.GetCoordinate(1,0));
    disy2->Fill(n1.GetCoordinate(1,1));
    disy3->Fill(n1.GetCoordinate(1,2));
+
    
+  
+   disyxchi->Fill(yxtempchi);
+   diszxchi->Fill(zxtempchi);
+   disyzchi->Fill(yztempchi);
       dischi->Fill(chi);
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "k: " << k << endl; cin.get();}
-      if( ((yxtempchi>0) && yztempchi && zxtempchi > 0) && (yxtempchi < 2.5) && (yztempchi < 2.5) && (zxtempchi < 2.5) && !bestvalid){
+      if( (yxtempchi < 2.5) && (yztempchi < 2.5) && (zxtempchi < 2.5) && !bestvalid){
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;
@@ -278,6 +326,16 @@ void tracks(){
 
 
    while (!run.eof());
+
+   double yxchi_integral = 0;
+   for (int i = 81; i <= 300; i++) {
+     yxchi_integral += disyxchi->GetBinContent(i);
+   }
+
+   cout << "Integrale da 8 a 10 di yxchi: " << yxchi_integral << endl;
+   cout << "Dovrebbero essere: " << disyxchi->GetEntries()*0.0046 << endl;
+   
+
      // TCanvas* thetacanv = new TCanvas();
      // thetacanv->SetGrid();
      // thetacanv->cd();
@@ -313,6 +371,19 @@ void tracks(){
     hpc2->Write();
     hpc3->Write();
     dischi->Write();
+    disyxchi->Write();
+    diszxchi->Write();
+    disyzchi->Write();
+    av_dist1->Write();
+    av_dist2->Write();
+    av_dist3->Write();
+    av_distx1->Write();
+    av_distx2->Write();
+    av_distx3->Write();
+    av_disty1->Write();
+    av_disty2->Write();
+    av_disty3->Write();
+    
      disprimatheta->Write();
      disprimaphi->Write();
      piccolitheta->Write();

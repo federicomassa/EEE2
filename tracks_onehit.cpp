@@ -61,8 +61,8 @@ void tracks(){
   TH1F* disdisty1 = new TH1F("disdisty1","Y Distance distribution, Ch1;Y Distance;#",800,-400,400);
   TH1F* disdisty2 = new TH1F("disdisty2","Y Distance distribution, Ch2;Y Distance;#",800,-400,400);
   TH1F* disdisty3 = new TH1F("disdisty3","Y Distance distribution, Ch3;Y Distance;#",800,-400,400);
- TH1F* errx = new TH1F("errx","X Resolution, Ch2;Distance (cm);#",80,-20,20);
- TH1F* erry = new TH1F("erry","Y Resolution, Ch2;Distance (cm);#",400,-20,20);
+ TH1F* errx = new TH1F("errx","X Resolution, Ch2;Distance (cm);#",50,-20,20);
+ TH1F* erry = new TH1F("erry","Y Resolution, Ch2;Distance (cm);#",200,-20,20);
 
   TH2F* thetaphi = new TH2F("phi-theta","Phi-Theta Correlation;Phi(deg);Theta(deg)", 90,0,360,50,0,90);
   triplet n1;
@@ -222,7 +222,7 @@ void tracks(){
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "k: " << k << endl; cin.get();}
-      if( ((yxtempchi>0) && yztempchi && zxtempchi > 0) && (yxtempchi < 5) && (yztempchi < 5) && (zxtempchi < 5) ){
+      if((yxtempchi < 25) && (yztempchi < 25) && (zxtempchi < 25) ){
 	//	 YXint = n1.YXGetParameter(0);
 	 YZint = n1.YZGetParameter(0);
 	 ZXint = n1.ZXGetParameter(0);

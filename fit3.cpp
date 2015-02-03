@@ -145,7 +145,7 @@ void SetPoints(point x1, point x2, point x3){
     if (xv[0] == xv[1] && xv[0] == xv[2]) xvert = true; else xvert = false;
     if (yv[0] == yv[1] && yv[0] == yv[2]) yvert = true; else yvert = false;
     if (zv[0] == zv[1] && zv[0] == zv[2]) zvert = true; else zvert = false;
-      for (int i = 0; i < 3;i++) {xerr[i] = 0.8; yerr[i] = 1.5;zerr[i] = 0.5;}
+      for (int i = 0; i < 3;i++) {xerr[i] = 0.7; yerr[i] = 1.6;zerr[i] = 0.2;}
       // for (int i = 0; i < 3;i++) {xerr[i] = 1; yerr[i] = 0;zerr[i] = 3.333;}
 };  //incertezze di default, rivedere perché 2.
   

@@ -29,7 +29,7 @@ void mid_bot_tracks(){
   double x1, y1, z1;
   int count2 = 0;
   int evnum = 0;
-  int eff3 = 0, eff2 = 0;
+  int eff3 = 0, eff2 = 0, efft3 = 0;
   bool bestvert = false;
   // double *besty = new double[3];
   // double parameter = 0;
@@ -235,7 +235,7 @@ void mid_bot_tracks(){
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "evnum: " << evnum << endl; cin.get();}
-      if( ((yxtempchi>0) && yztempchi && zxtempchi > 0) && (yxtempchi < 30) && (yztempchi < 30) && (zxtempchi < 30) ){
+      if((yxtempchi < 6.63) && (yztempchi < 6.63) && (zxtempchi < 6.63) ){
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;
@@ -244,6 +244,7 @@ void mid_bot_tracks(){
 	//	if (theta > 1.22) {cout << "HUGE THETA at evnum: " << evnum << endl;}
 	distheta->Fill(theta*180/3.14159);
 	disphi->Fill(phi*180/3.14159);
+	efft3 += 1;
       }
    //  else {
    //  jj += 1;
@@ -328,5 +329,7 @@ void mid_bot_tracks(){
      run.close();
     
      cout << "EFFICIENZA: " << double(eff3)/double(eff2+eff3) << endl;
+     cout << "EFFICIENZA CON TRACKING: " << double(efft3)/double(eff2+eff3) << endl;
+     cout << "EFFICIENZA CON TRACKING CON FIT BUONI: " << double(efft3)/double(efft3+eff2);
 }
   

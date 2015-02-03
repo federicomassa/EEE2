@@ -16,7 +16,7 @@ using namespace std;
 
 int GetHitCount(string str){ //Calcola il numero di hits per evento
   int s = 0;
-  for (unsigned int i = 0; i < str.size(); i++) {
+  for (unsigned int i = 0; i < str.size() + 1; i++) {
     if(!isalnum(str[i]) && str[i] != '.' && str[i] != '-') //se trova un carattere non alfanumerico o . allora è la fine di un blocco
       s = s+1;
   }
@@ -33,8 +33,8 @@ void scint_eff(){
   bool bestvert;
   double *besty = new double[3];
   double parameter = 0;
-   ifstream run("../Data/EEE_Prova_SCINT9000__20140603_175916.txt"); //INPUT FILE  
-  TFile rfile("scint9000.root","RECREATE");
+   ifstream run("../EEEData/CORR_EEE_Prova_SCINT8500__20140604_112353.txt"); //INPUT FILE  
+  TFile rfile("scint7500.root","RECREATE");
   TH1F* dischi = new TH1F("dischi","Chi2 distribution; chi2; #", 100,0,1000);
   TH1F* hpc1 = new TH1F("hpc1", "Hit per chamber / Chamber 1; #Hits;# ", 20,0,20);
   TH1F* hpc2 = new TH1F("hpc2", "Hit per chamber / Chamber 2;#Hits;#", 20,0,20);
@@ -78,7 +78,6 @@ void scint_eff(){
   // for (int n = 0; n <= 108;n++) {getline(run,line);}
 
   //  for (k = 0; k <= 10000; k++){
-
    do  {k+= 1;// cout << "INIZIO DEL DO" << endl;
 	 //  if (m%5000 == 0) cout << m << " eventi analizzati..." << endl;
      if (line.find("EVENT") > 15 ) {getline(run,line);continue;}//Durante il run compaiono righe non di evento, se non lo trova find restituisce un numero molto grande
@@ -89,9 +88,10 @@ void scint_eff(){
     linecount = GetHitCount(line);
 
     if (linecount == 0){getline(run,line); continue;}
-
+    
        point* hit = new point[linecount];//alloca la memoria per tutti i punti dell'evento
-       //   cout << point::n << endl;
+       cout << "LINECOUNT: " << linecount << endl;
+  //   cout << point::n << endl;
   // cout << GetHitCount(line) << endl;
   for (unsigned int i = 0; i < line.size()+1; i++) {
     if(!isalnum(line[i]) && line[i] != '.' && line[i] != '-') {
@@ -99,7 +99,8 @@ void scint_eff(){
       if (entry != "" && j == 4) {stringstream(entry) >> evnum; cout << "EVENTO NUMERO: " << evnum << endl;} 
       if (entry != "" && j >= 9) {
 	stringstream(entry) >> number;
-	//    	cout << number << endl;
+	//	cout << j << endl;
+	//		cout << number << endl;
 	hit[int(floor((double(j)-9)/3))].SetValue(j%3,number);
 	//	    cout << "OK" << endl;
 	if (j%3 == 2) {
@@ -119,11 +120,12 @@ void scint_eff(){
       else entry = entry + line.substr(i,1);
   } //fine ciclo linea
 
- 
+
   double* x = new double[linecount];
   double* y = new double[linecount];
   double* z = new double[linecount];
   
+
 
    for (int q = 0; q < linecount; q++){
      x[q] = hit[q].x;
@@ -131,6 +133,7 @@ void scint_eff(){
      z[q] = hit[q].z;}
    TGraph2D* evdisplay = new TGraph2D(linecount,x,y,z);
     evdisplay->SetTitle("Event Display;X;Y;Z");
+
 
     // qui inserire event display
     //         if (evnum == 148) evdisplay->Write(); 
@@ -176,13 +179,15 @@ void scint_eff(){
    if (ch1 >= 1 && ch3 >= 1 && ch2 == 0) eff_tb+= 1;
    if (ch1 >= 1 && ch2>= 1 && ch3 >= 1) eff_tmb += 1;
  
-
   j = 0;
     delete[] x;
     delete[] y;
     delete[] z;
      delete evdisplay;
+  
   delete[] hit;
+ 
+
   // cout << point::n << endl;
   getline(run,line);
   entry = "";
@@ -196,6 +201,7 @@ void scint_eff(){
    disz->SetBinContent(8,disz->GetBinContent(8)+ch2);
    disz->SetBinContent(12,disz->GetBinContent(12)+ch3);
    
+
 
    if (ch1 >= 1) c1 += 1;
    if (ch2 >= 1) c2 += 1;
