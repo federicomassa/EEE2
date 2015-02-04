@@ -1,0 +1,5 @@
+int cell(double x,double L, const int imax) {
+  double x2 = x + L/2;
+  int n = round(x2/L*double(imax));
+  return n;
+    }

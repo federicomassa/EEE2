@@ -115,7 +115,13 @@ In uscita vengono restituiti i seguenti files: \\
 \item \textbf{.sto}: file contenente una prima analisi dei risultati del run. Contiene informazioni quali le distribuzioni di occupancy nelle tre camere, la molteplicità di hit e i risultati di altre analisi condotti sugli eventi che presentano un solo hit per ogni camera, i quali non sono però stati utilizzati.
 \end{enumerate}
 
-Di questi, il fondamentale è quello \textbf{.txt}, ed è stato l'unico utilizzato nel corso dell'esperimento.
+Di questi, il fondamentale è quello \textbf{.txt}, ed è stato l'unico utilizzato nel corso dell'esperimento. La struttura di un evento è la seguente: \\
+
+ \normalsize \texttt{UNIX-TIME \ EVENT \ Trig.Num. \ Ev.Num. \ Seconds \ Nanoseconds \ Cal0 \ Cal1 \ Coordinates...} \\
+ 
+ 
+\Large{In particolare, \texttt{Trig.Num.} identifica quante volte il trigger ha inviato un segnale alla scheda di acquisizione prima dell'evento analizzato, mentre \texttt{Ev.Num.} indica il numero di eventi validi (ovvero che sono risultati nella determinazione di una coppia di coordinate sul piano delle camere) dall'inizio dell'acquisizione all'evento considerato. Il tempo viene invece calcolato misurando i conteggi di un segnale di clock che viene considerato di periodo $25 \ ns$. Dalla misurazione del periodo reale del clock si ottengono le costanti di calibrazione che possono essere usate per ottenere la misura precisa dell'istante di tempo corrispondente all'evento.}
+
 
 \subsection{Scintillatori}
 Due scintillatori sono stati posizionati sopra e sotto il sistema di tracciamento. La loro misura è $44 \ x \ 125.5 cm^2$. Lo scintillatore posto sopra il sistema dista $37.5 \ cm$ dalla camera alta, mentre lo scintillatore posto sotto il sistema dista $16 \ cm$ dalla camera bassa. Gli scintillatori sono opportunamente alimentati, il loro segnale è digitalizzato ed è possibile utilizzare uno di questi o la loro coincidenza come segnale di trigger per il sistema di acquisizione. Il sistema così configurato è stato utilizzato per delle verifiche sulle misure di efficienza delle camere MRPC.
@@ -204,6 +210,21 @@ Nel caso descritto sarebbe inoltre possibile definire una distanza di correlazio
 \end{center}
 \end{figure}
 
+\subsection{Misura del tempo morto del sistema}
+Per la stima del tempo morto è stata studiata la distribuzione degli intervalli di tempo tra due eventi consecutivi. Trascurando il tempo morto e nell'assunto che i tempi di arrivo delle particelle seguano una distribuzione completamente random, è stato verificato empiricamente che le differenze dei tempi tra due eventi consecutivi seguono invece una distribuzione esponenziale con media uguale al reciproco del rate. Quando si considera il tempo morto, invece, si osserva un taglio abbastanza netto in corrispondenza di tale valore. In fig. \ref{fig:dead_time} è mostrato il risultato ottenuto dall'analisi di un file ad alta statistica.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{dead_time1}
+\caption{Distribuzione degli intervalli di tempo tra due eventi consecutivi. In rosso, fit esponenziale.}
+\label{fig:dead_time}
+\end{center}
+\end{figure}
+
+Il taglio della distribuzione in corrispondenza del tempo morto non è perfettamente netto, ma ha una risalita rapida. Essendo questa misura necessaria solo per una correzione, si è deciso di stimare il tempo morto come il punto corrispondente al raggiungimento di metà dell'altezza della distribuzione. Risulta quindi: \\
+\[ \tau_{dead} \approx 8 \ ms \]
+
+
 
 \subsection{Misure di efficienza}
 Le misure di efficienza delle camere possono effettuate secondo modalità molteplici. L'efficienza del piano centrale può essere calcolata in modo immediato esaminando dati acquisiti con la modalità di trigger \textit{TOP-BOTTOM}, ovvero richiedendo la presenza di un hit nelle camere esterne per la registrazione di un evento, e valutando il numero di eventi per i quali viene anche ravvisato uno o più hit nella camera centrale. \\
@@ -219,6 +240,44 @@ Per realizzare tale trigger alternativo si fa uso di due piani scintillatori est
 Il calcolo effettivo dell'efficienza utilizzando i dati acquisiti con il metodo appena descritto può essere condotta facendo o meno uso della ricostruzione delle tracce.
 Qualora i valori di efficienza calcolati con il trigger esterno non fossero compatibili con le misure delle medesime quantità effettuate in precedenza si avrebbe un indizio della possibile presenza di un problema nel sistema di trigger dell'apparato.\\
 (VALORI EFFICIENZE, GRAFICO VARIAZIONE CON LA TENSIONE, GRAFICO PARAGONE TRIGGER ESTERNO O INTERNO)
+
+\subsubsection{Misura della non uniformità spaziale dell'efficienza}
+Si ritiene che la misura più attendibile dell'efficienza, a causa dell'alta rumorosità delle camere, sia quella ottenuta con il trigger degli scintillatori. \'E possibile ottenere una misura della distribuzione spaziale delle efficienze richiedendo, esaminando questi eventi con la richiesta di avere almeno un hit su altre due camere. Con il numero di eventi a disposizione è stato possibile dividere idealmente le camere in 48 zone ciascuna, corrispondenti alle 24 strip e a una divisione in due parti dell'asse y, ottenendo efficienze con un'incertezza non superiore al $10 \%$. L'algoritmo utilizzato è descritto a seguire: \\
+
+\begin{enumerate}
+\item Considerato un evento, si controlla se possiede almeno un hit sulla camera della quale si vuole determinare l'efficienza o meno.
+\item Se l'evento non possiede hit sulla camera in questione, si considerano tutte le combinazioni di punti formate da un punto su ognuna delle altre due camere. Le rette formate da questi due punti sono prolungate sulla terza camera e, se il punto è interno alla camera, si aumenta un contatore \textbf{\textit{count2}} riferito alla zona della camera colpita. \textit{N.B. per ogni evento il contatore riferito alla stessa zona può essere aumentato una sola volta}.
+\item Se l'evento possiede almeno un hit sulla camera della quale si vuole determinare l'efficienza, si incrementa un contatore \textbf{\textit{count3}} riferito alla zona colpita. \textit{N.B. per ogni evento il contatore riferito alla stessa zona può essere aumentato una sola volta}.
+\item Si itera su tutti gli eventi del run. Per ogni zona si calcola l'efficienza come il rapporto \[\frac{count3}{count3 + count2}\].
+\end{enumerate}
+
+I risultati sono mostrati, per le tre camere, nelle figure \ref{fig:eff_zone1}, \ref{fig:eff_zone2}, \ref{fig:eff_zone3}. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{eff_zone1}
+\caption{Distribuzione delle efficienze nella camera 1.}
+\label{fig:eff_zone1}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{eff_zone2}
+\caption{Distribuzione delle efficienze nella camera 2.}
+\label{fig:eff_zone2}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{eff_zone3}
+\caption{Distribuzione delle efficienze nella camera 3.}
+\label{fig:eff_zone3}
+\end{center}
+\end{figure}
+
+Non avendo con questo metodo effettuato un taglio sul $\chi^2$ delle tracce, risulta essere da confrontare con le analoghe misure di efficienza riportate nella sezione precedente, da cui si osserva che la media delle efficienze di ogni zona risulta essere compatibile (??????) con quella globale della rispettiva camera entro il ??? di errore.
 
 \section{Simulazione}
 
@@ -260,8 +319,6 @@ L'asimmetria nella disposizione spaziale delle strip mancanti è causa di un eff
 \section{Metodo di misura}
 
 \subsection{Determinazione della distribuzione angolare dei RC}
-
-\subsubsection{Ricostruzione delle tracce}
 
 
 
@@ -316,21 +373,7 @@ Il suddetto metodo ha la limitazione di non considerare la possibilità che il c
 Per verificare che i raggi cosmici siano distribuiti secondo la legge descritta in sez. \ref{sec:intro} si possono confrontare le distribuzioni di $\theta$ e $\phi$ ottenute sperimentalmente e con la simulazione, una volta riscalato opportunamente le distribuzioni relative a quest'ultima sul numero di eventi totale. La compatibilità è stata verificata con un test di Pearson.
 
 \subsection{Variabilità introdotta dalle condizioni ambientali}
-
-\subsubsection{Umidità esterna}
-
-\subsubsection{Pressione Atmosferica esterna}
-
-\subsubsection{Temperatura esterna}
-
-
-
-
-0    332093675 ... 332096124.0  --> 0.332096124
-2985 25873675  ... 25873865.82  --> 2985.025873866
-22.40544744
-
-39999705
+Le misure sono state effettuate in un periodo di tempo troppo limitato per poter avere una buona variabilità delle condizioni ambientali. Misure di questo tipo dovrebbero essere raccolte nell'arco di più giorni e possibilmente in periodi diversi dell'anno. Si richiede, inoltre, una statistica elevata per poter osservare variazioni nella distribuzione angolare dei raggi cosmici o nel flusso totale, in quanto non ci si aspetta variazioni macroscopiche.
 
 
 \section{Risultati Sperimentali}

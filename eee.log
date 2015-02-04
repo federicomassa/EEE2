@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.11.29)  2 FEB 2015 19:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.11.29)  4 FEB 2015 01:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -531,113 +531,161 @@ Underfull \hbox (badness 10000) in paragraph at lines 109--110
 Overfull \hbox (6.3154pt too wide) in paragraph at lines 118--119
 []\OT1/cmr/m/n/10.95 Di questi, il fon-da-men-tale ^^Re quello \OT1/cmr/bx/n/10
 .95 .txt\OT1/cmr/m/n/10.95 , ed ^^Re stato l'unico uti-liz-zato nel corso dell'
-esperimento. 
+esperimento.
  []
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-32.def
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--119
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+
+ []
+
+[4] (/usr/local/texlive/2014/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-) [4]
+)
 File: mrpc.png Graphic file (type png)
 
 <use mrpc.png>
-Package pdftex.def Info: mrpc.png used on input line 133.
-(pdftex.def)             Requested size: 133.07489pt x 80.2516pt.
-LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 136.
-File: mrpc.png Graphic file (type png)
- <use mrpc.png>
 Package pdftex.def Info: mrpc.png used on input line 139.
 (pdftex.def)             Requested size: 133.07489pt x 80.2516pt.
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 142.
+File: mrpc.png Graphic file (type png)
+ <use mrpc.png>
+Package pdftex.def Info: mrpc.png used on input line 145.
+(pdftex.def)             Requested size: 133.07489pt x 80.2516pt.
 
 
-LaTeX Warning: Citation `articolo_EEE' on page 5 undefined on input line 148.
+LaTeX Warning: Citation `articolo_EEE' on page 5 undefined on input line 154.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 148--149
+Underfull \hbox (badness 10000) in paragraph at lines 154--155
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 153--154
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
 
  []
 
-[5] <errx.png, id=32, 759.83875pt x 569.12625pt>
+<errx.png, id=34, 1054.94125pt x 569.12625pt>
 File: errx.png Graphic file (type png)
  <use errx.png>
-Package pdftex.def Info: errx.png used on input line 165.
-(pdftex.def)             Requested size: 221.78923pt x 166.11922pt.
+Package pdftex.def Info: errx.png used on input line 171.
+(pdftex.def)             Requested size: 221.78923pt x 119.6503pt.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 166.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 172.
 
-<erry.png, id=33, 730.73pt x 569.12625pt>
+<erry.png, id=35, 730.73pt x 569.12625pt>
 File: erry.png Graphic file (type png)
  <use erry.png>
-Package pdftex.def Info: erry.png used on input line 171.
+Package pdftex.def Info: erry.png used on input line 177.
 (pdftex.def)             Requested size: 221.78923pt x 172.73654pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 179--180
+Underfull \hbox (badness 10000) in paragraph at lines 185--186
 
  []
 
 [6 <./errx.png> <./erry.png>]
-Overfull \hbox (1.62068pt too wide) in paragraph at lines 201--203
+Underfull \hbox (badness 10000) in paragraph at lines 201--203
+
+ []
+
+<dis_correlazione.png, id=41, 619.31375pt x 567.11874pt>
+File: dis_correlazione.png Graphic file (type png)
+
+<use dis_correlazione.png>
+Package pdftex.def Info: dis_correlazione.png used on input line 207.
+(pdftex.def)             Requested size: 185.79555pt x 170.13693pt.
+ [7 <./dis_correlazione.png>]
+<dead_time1.png, id=46, 855.195pt x 569.12625pt>
+File: dead_time1.png Graphic file (type png)
+ <use dead_time1.png>
+Package pdftex.def Info: dead_time1.png used on input line 218.
+(pdftex.def)             Requested size: 256.56049pt x 170.73918pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 224--225
+
+ []
+
+
+Overfull \hbox (1.62068pt too wide) in paragraph at lines 230--232
 \OT1/cmr/m/n/10.95 Le mis-ure di ef-fi-cienza delle camere pos-sono ef-fet-tuat
 e sec-ondo modalit^^Ra molteplici. L'efficienza
  []
 
-
-Overfull \hbox (32.20758pt too wide) in paragraph at lines 209--214
+[8 <./dead_time1.png>]
+Overfull \hbox (32.20758pt too wide) in paragraph at lines 238--243
 \OT1/cmr/m/n/10.95 (VALORI EF-FI-CIENZE, GRAFICO VARI-AZIONE CON LA TEN-SIONE, 
 GRAFICO PARAGONE
  []
 
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 224--226
+
+Underfull \hbox (badness 10000) in paragraph at lines 245--246
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
-
- []
-
-[8]
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 294.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 294.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 294.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 289--295
-
+Overfull \hbox (2.01524pt too wide) in paragraph at lines 250--251
+[]\OT1/cmr/m/n/10.95 Se l'evento possiede al-meno un hit sulla cam-era della qu
+ale si vuole de-ter-minare l'efficienza,
  []
 
 [9]
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 297.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 282.
 
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 298.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 282.
 
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 298.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 282.
 
-[10] (./bibEEE.bib) [11] (./eee.aux)
+
+Underfull \hbox (badness 10000) in paragraph at lines 277--283
+
+ []
+
+[10]
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 285.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 286.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 286.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 299--301
+
+ []
+
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 326--328
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 331--333
+
+ []
+
+[12] (./bibEEE.bib) [13] (./eee.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 6187 strings out of 493109
- 92658 string characters out of 6135009
- 161982 words of memory out of 5000000
- 9508 multiletter control sequences out of 15000+600000
- 17038 words of font info for 66 fonts, out of 8000000 for 9000
+ 6206 strings out of 493109
+ 92993 string characters out of 6135009
+ 161017 words of memory out of 5000000
+ 9523 multiletter control sequences out of 15000+600000
+ 17733 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,7n,38p,1081b,519s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
@@ -655,11 +703,13 @@ al/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local
 xlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texli
 ve/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
 e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
-2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on eee.pdf (11 pages, 372025 bytes).
+2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2
+014/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/20
+14/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on eee.pdf (13 pages, 423506 bytes).
 PDF statistics:
- 109 PDF objects out of 1000 (max. 8388607)
- 75 compressed objects within 1 object stream
+ 126 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

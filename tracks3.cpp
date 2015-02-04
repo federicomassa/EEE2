@@ -36,6 +36,7 @@ void tracks(){
   //  int point::n = 0;
     // TFile rfile("Disttopbot.root","RECREATE");
  TFile rfile("Dist_all_trasl.root","RECREATE");
+ TH1F* time_dist = new TH1F("time_dist", "Distribuzione dei tempi tra due eventi consecutivi; Tempo (ms);# ", 1000,0,1000);
  TF1* manyhitsline = new TF1("prova","[0]+[1]*x",0,15);
   TH2F* manyhits2 = new TH2F("manyhits","Many-hits events correlation: Ch 2", 30,0,15,100,0,50);
   TH1F* dischi = new TH1F("dischi","Chi2 distribution; chi2; #", 100,0,10);
@@ -90,6 +91,7 @@ TH1F* disyzchi = new TH1F("disyzchi","YZ Chi2 distribution; chi2; #", 300,0,30);
   int k = -1;
   int k1 = 0, k2 = 0, k3 = 0;
   double d1 = 0, d2 = 0, d3 = 0, dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0, dx3 = 0, dy3 = 0;
+  double seconds = 0, nanoseconds = 0, calibration = 0, prev_time = 0, next_time = 0;
   do{
     getline(run,line);
   }
@@ -115,8 +117,23 @@ TH1F* disyzchi = new TH1F("disyzchi","YZ Chi2 distribution; chi2; #", 300,0,30);
   for (unsigned int i = 0; i < line.size()+1; i++) {
     if(!isalnum(line[i]) && line[i] != '.' && line[i] != '-') {
       j = j+1;
+
       if (entry != "" && j == 4) {stringstream(entry) >> number; cout << "EVENTO NUMERO: " << number << endl;} 
+      if (entry != "" && j == 5) {stringstream(entry) >> seconds;}
+      if (entry != "" && j == 6) {stringstream(entry) >> nanoseconds;}
+      if (entry != "" && j == 7) {
+
+	stringstream(entry) >> calibration;
+	next_time = seconds*1000 + nanoseconds*4E7/calibration/1E6; //ms
+	if (prev_time != 0) 
+	  {time_dist->Fill(next_time-prev_time);} 
+	
+	//	cout << (next_time == prev_time) << " " << next_time << " " <<  prev_time << " " << calibration << endl;
+	prev_time = next_time;
+}
+        
       if (entry != "" && j >= 9) {
+
 	stringstream(entry) >> number;
 	hit[int(floor((double(j)-9)/3))].SetValue(j%3,number);
 	if (j%3 == 2) {
@@ -387,6 +404,7 @@ TH1F* disyzchi = new TH1F("disyzchi","YZ Chi2 distribution; chi2; #", 300,0,30);
      disprimatheta->Write();
      disprimaphi->Write();
      piccolitheta->Write();
+     time_dist->Write();
      rfile.Close();
      run.close();
 }
