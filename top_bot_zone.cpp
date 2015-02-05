@@ -28,8 +28,8 @@ int GetHitCount(string str){ //Calcola il numero di hits per evento
 
 void top_bot_tracks(){
   double z1 = 53.2, z2 = 0, z3 = -52.8;
-  double Lx = 78.5834; //distanza massima tra strip
-  double Ly = 159; //distanza massima in y
+  double Lx = 82; //distanza massima tra strip
+  double Ly = 158; //distanza massima in y
   double midx, midy;
   const int umax = 24;
   const int vmax = 2;
@@ -136,8 +136,8 @@ void top_bot_tracks(){
 	for (int b = ch1; b < ch1+ch3; b++) {
 	  midx = ZXGetIntercept(hit[a],hit[b]);
 	  midy = -YZGetIntercept(hit[a],hit[b])/YZGetSlope(hit[a],hit[b]);
-	  cellx = cell(midx,Lx,umax);
-	  celly = cell(midy,Ly,vmax);
+	  cellx = xcell(midx,Lx,umax);
+	  celly = ycell(midy,Ly,vmax);
 	  if (check[cellx][celly] == 0) count2[cellx][celly] += 1;
 	  check[cellx][celly] = 1;
 	}}
@@ -163,8 +163,8 @@ void top_bot_tracks(){
    	 	 n1.SetPoints(hit[a],hit[b+ch1],hit[c+ch1+ch2]); //considero tutte le combinazioni di triplette
    		  //		  cout << "PRIMA FIT" << endl;
 		 //ZONE
-		 cellx = cell(hit[b+ch1].x, Lx, umax); 
-		 celly = cell(hit[b+ch1].y, Ly, vmax); 
+		 cellx = xcell(hit[b+ch1].x, Lx, umax); 
+		 celly = ycell(hit[b+ch1].y, Ly, vmax); 
 		 if (check[cellx][celly] == 0) count3[cellx][celly] += 1;
 		 check[cellx][celly] = 1;
 		 
@@ -195,8 +195,8 @@ void top_bot_tracks(){
        for (int v = 0; v < vmax; v++) {
 	 eff[u][v] = double(count3[u][v])/double(count3[u][v]+count2[u][v]);
 	 eff_zone->SetBinContent((u+1)*4,(v+1),eff[u][v]);
-	 if (v == vmax - 1) cout << count3[u][v] << endl;
-	 else cout << count3[u][v] << '\t';
+	 if (v == vmax - 1) cout << eff[u][v] << endl;
+	 else cout << eff[u][v] << '\t';
        }
      }
      

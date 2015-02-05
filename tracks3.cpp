@@ -289,7 +289,7 @@ TH1F* disyzchi = new TH1F("disyzchi","YZ Chi2 distribution; chi2; #", 300,0,30);
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "k: " << k << endl; cin.get();}
-      if( (yxtempchi < 2.5) && (yztempchi < 2.5) && (zxtempchi < 2.5) && !bestvalid){
+      if( (yxtempchi < 6.63) && (yztempchi < 6.63) && (zxtempchi < 6.63) && !bestvalid){
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;

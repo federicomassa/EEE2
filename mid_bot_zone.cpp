@@ -132,8 +132,8 @@ void mid_bot_tracks(){
 	
 
 	  if ((sqr(x1) < sqr(82.0) && (sqr(y1) < sqr(158.0)))) {
-	      cellx = cell(x1,Lx,umax);
-	      celly = cell(y1,Ly,vmax);
+	      cellx = xcell(x1,Lx,umax);
+	      celly = ycell(y1,Ly,vmax);
 	      if (check[cellx][celly] == 0) count2[cellx][celly] += 1;
 	      check[cellx][celly] = 1;
 	  }
@@ -155,8 +155,8 @@ void mid_bot_tracks(){
      for (int b = ch1; b < ch1+ch2; b++) {
        for (int c = ch1+ch2; c < ch1+ch2+ch3; c++) {
    	 	 n1.SetPoints(hit[a],hit[b],hit[c]); //considero tutte le combinazioni di triplette
-		 cellx = cell(hit[a].x,Lx,umax);
-		 celly = cell(hit[a].y,Ly,vmax);
+		 cellx = xcell(hit[a].x,Lx,umax);
+		 celly = ycell(hit[a].y,Ly,vmax);
 		 if (check[cellx][celly] == 0){ count3[cellx][celly] += 1;}
 		 check[cellx][celly] = 1;
    	

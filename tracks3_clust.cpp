@@ -41,7 +41,7 @@ void tracks(){
     ifstream run("../EEEData/CORR_EEE_PISA01TestRun4Telescopes_20140507_014455.txt"); //INPUT FILE
   //  int point::n = 0;
     // TFile rfile("Disttopbot.root","RECREATE");
- TFile rfile("Dist_all_trasl.root","RECREATE");
+ TFile rfile("Dist_all_trasl_clust.root","RECREATE");
  TF1* manyhitsline = new TF1("prova","[0]+[1]*x",0,15);
   TH2F* manyhits2 = new TH2F("manyhits","Many-hits events correlation: Ch 2", 30,0,15,100,0,50);
   TH1F* dischi = new TH1F("dischi","Chi2 distribution; chi2; #", 100,0,10);
@@ -205,7 +205,7 @@ void tracks(){
    		  //		  cout << "PRIMA FIT" << endl;
    		  n1.Fit();
 		  if (n1.yvert || n1.zvert){ cout << "Verticalità a k: " << k << endl;
-		    getline(cin,test);}
+		   }
 		  
 		  //	  n1.XZFit();
    		  //  cout << "DOPO FIT" << endl;
@@ -234,7 +234,7 @@ void tracks(){
   
    //Riempiamo gli istogrammi di theta e phi se il fit è andato bene. Se è verticale considero solamente una sezione
       //     if (phi > 1.5 && phi < 1.64 && yztempchi > 30 && bestvert) {cout << "y sospette: " << besty[0] << '\t' << besty[1] << '\t' << besty[2] << endl; cout << "k: " << k << endl; cin.get();}
-      if( ((yxtempchi < 2.5) && (yztempchi < 2.5) && (zxtempchi < 2.5) && !bestvalid)) {
+      if( ((yxtempchi < 6.63) && (yztempchi < 6.63) && (zxtempchi < 6.63) && !bestvalid)) {
      // cout << "Fit con chi2: " << chi << endl;
      // cout << "Theta: " << n1.GetTheta() << endl;
      // cout << "Phi: " << n1.GetPhi() << endl;
@@ -287,7 +287,7 @@ void tracks(){
   zxtempchi = n1.ZXGetChisquare_m();
   yztempchi = n1.YZGetChisquare_m();
       // n1.YZFit();
-  if (!bestvalid && yztempchi < 2.5 && zxtempchi < 2.5 && yxtempchi < 2.5) { //se il fit è valido..
+  if (!bestvalid && yztempchi < 6.63 && zxtempchi < 6.63 && yxtempchi < 6.63) { //se il fit è valido..
     clust_theta->Fill(n1.GetTheta()*180/3.14159);
     clust_phi->Fill(n1.GetPhi()*180/3.14159);}
       // XYint = n1.XYGetInter
@@ -357,6 +357,17 @@ void tracks(){
     dischi->Write();
      disprimatheta->Write();
      disprimaphi->Write();
+
+     for (int i = 1; i <= 50; i++) {
+       clust_theta->SetBinContent(i,clust_theta->GetBinContent(i)*21976/19804);
+     }
+
+     for (int i = 1; i <= 90; i++) {
+       clust_phi->SetBinContent(i,clust_phi->GetBinContent(i)*21976/19804);  
+     }
+     
+
+
      clust_theta->Write();
      clust_phi->Write();
      piccolitheta->Write();

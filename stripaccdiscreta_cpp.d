@@ -53,7 +53,8 @@
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TH2.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixFBasefwd.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDBasefwd.h
-./stripaccdiscreta_cpp.so: fit.cpp hit.cpp /home/federico/root/include/TF1.h
+./stripaccdiscreta_cpp.so: fit3.cpp hit3.cpp
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TF1.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TFormula.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TBits.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TObjArray.h
@@ -71,5 +72,27 @@
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TQObject.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TAttCanvas.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/TCanvasImp.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMath.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TError.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TLinearFitter.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TVectorD.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TVectorT.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixT.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixTBase.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixTUtils.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixTSym.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixTSparse.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixD.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDfwd.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDUtils.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDUtilsfwd.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDSym.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDSymfwd.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDSparse.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMatrixDSparsefwd.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TVirtualFitter.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TMethodCall.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/TDictionary.h
+./stripaccdiscreta_cpp.so: /home/federico/root/include/Property.h cell.h
 ./stripaccdiscreta_cpp.so: /home/federico/root/include/cintdictversion.h /home/federico/root/include/RVersion.h
 stripaccdiscreta_cpp__ROOTBUILDVERSION= 5.34/08

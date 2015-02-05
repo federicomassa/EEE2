@@ -129,7 +129,7 @@ Due scintillatori sono stati posizionati sopra e sotto il sistema di tracciament
 \section{Operazioni preliminari}
 È stata effettuata un’analisi preliminare dei dati raccolti allo scopo di cercare eventuali anomalie macroscopiche nel funzionamento delle camere, come ad esempio eventuali strip mancanti o rumorose. Allo stesso tempo si è condotta un'analisi dell'efficienza delle tre camere in funzione della tensione di alimentazione ai capi delle strip (è questa l'alimentazione IMPORTANTE??). INTRO ALL'INCERTEZZA
 
-\subsection{Correzioni geometriche}
+\subsection{Correzioni geometriche} \label{subsec:corr_geom}
 Le coordinate dei punti nel file in uscita non corrispondo a quelle reali della camera. Per correggere questo effetto è stato considerato il file corrispondente a un run ad alta statistica e, per ogni camera, è stata guardata la distribuzione di occupancy sul piano XY. Da questa distribuzione sono state estratte le posizioni delle strip (per quanto riguarda la coordinata x) e i valori estremi che assume la coordinata y per ogni strip. In realtà nella distribuzione precedente alla correzione, mostrata in fig. \ref{fig:disxy1_prima}, si vede che le coordinate y non hanno un limite perfettamente definito. \'E possibile, infatti, che tra i valori restituiti ve ne siano alcuni che derivano da eventi di rumore nel TDC. I valori degli estremi sono stati ricavati cercando i punti in cui l'istogramma assume valori nulli per più di un bin consecutivo. Una volta applicate le traslazioni per ogni camera e per ogni strip, i valori sono stati riscalati alle dimensioni reali delle camere. Il risultato è mostrato in fig. \ref{fig:disxy1_dopo}.
 
 \begin{figure}
@@ -261,7 +261,7 @@ I risultati sono mostrati, per le tre camere, nelle figure \ref{fig:eff_zone1}, 
 \end{center}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!]
 \begin{center}
 \includegraphics[scale=0.3]{eff_zone2}
 \caption{Distribuzione delle efficienze nella camera 2.}
@@ -269,7 +269,7 @@ I risultati sono mostrati, per le tre camere, nelle figure \ref{fig:eff_zone1}, 
 \end{center}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!]
 \begin{center}
 \includegraphics[scale=0.3]{eff_zone3}
 \caption{Distribuzione delle efficienze nella camera 3.}
@@ -277,7 +277,7 @@ I risultati sono mostrati, per le tre camere, nelle figure \ref{fig:eff_zone1}, 
 \end{center}
 \end{figure}
 
-Non avendo con questo metodo effettuato un taglio sul $\chi^2$ delle tracce, risulta essere da confrontare con le analoghe misure di efficienza riportate nella sezione precedente, da cui si osserva che la media delle efficienze di ogni zona risulta essere compatibile (??????) con quella globale della rispettiva camera entro il ??? di errore.
+Non avendo con questo metodo effettuato un taglio sul $\chi^2$ delle tracce, risulta essere da confrontare con le analoghe misure di efficienza riportate nella sezione precedente, da cui si osserva che la media delle efficienze di ogni zona risulta essere compatibile (??) con quella globale della rispettiva camera entro il ??? di errore.
 
 \section{Simulazione}
 
@@ -327,17 +327,20 @@ L’acquisizione delle misure è per il momento effettuata in modalità AND ALL,
 Gli eventi che rispettano la condizione di trigger vengono analizzati con un software in linguaggio C++ interfacciato ROOT finalizzato alla ricostruzione della traccia eventuale e all’estrapolazione dei parametri angolari della traccia in questione.\\
 
 Qualunque valore assumano i parametri della traccia tridimensionale $(\theta, \phi)$, essi possono sempre essere determinati univocamente a partire dall'analisi delle proiezioni bidimensionali determinate dalla traccia su due dei tre piani proiettivi XY, YZ e XZ. \\
-A causa del fatto che i valori delle coordinate X e Z resituiti dall'apparato sono entrambi discreti, si è deciso di non eseguire analisi quest’ultimo piano, onde evitare indeterminazioni ed eventuali problemi con l'algoritmo di fit e di calcolo del chi quadro in caso di retta verticale.\\
-I fit individali restituiscono delle rette della forma $Y=mX+q$ e $Z=nY+k$ rispettivamente.
+A causa del fatto che i valori assunti dalla coordinata X sono discreti, si è deciso di usare quest'ultima come ordinata, onde evitare eventuali problemi con l'algoritmo di fit e di calcolo del chi quadro in caso di retta verticale.\\
+I fit individali restituiscono delle rette della forma $X=m_{YX}Y+q_{YX}$, $Z=m_{YZ}Y+q_{YZ}$ e $X = m_{ZX}Z + q_{ZX}$ rispettivamente.
 \\
-L'angolo azimutale $\phi$ è determinato interamente a partire dalla pendenza della traccia proiettiva sul piano XY, corrispondente al piano di una camera, e risulta:\[\tan{\phi}=\frac{dY}{dX}\biggr\rvert_{fit}\]
-L'angolo $\theta$ della traccia con la verticale alle camere, si ottiene come:
-\begin{equation}
-\tan{\theta}=\Bigg(\frac{dZ}{dY}\biggr\rvert_{fit}\!\!\!\cdot \sin{\phi}\Bigg)^{-1}
-\end{equation}
+L'angolo azimutale $\phi$ è determinato interamente a partire dalla pendenza della traccia proiettiva sul piano XY, corrispondente al piano di una camera, e risulta: \\
+\[ \phi= \left(atan(m_{YX}^{-1}) + n\pi \right) \rvert_{fit}\]
+dove $n$ può assumere i valori $0$, $1$ o $2$ a seconda del segno di $\phi$ e di $m_YZ$.
+
+L'angolo $\theta$ della traccia con la verticale alle camere, si ottiene come: \\
+
+\[ \theta = |atan\left(m_{YZ}^{-1} \right) \cdot sin(\phi)|_{fit} \]
+
 
 L’algoritmo di ricostruzione incorpora inoltre un processo decisionale per la scelta della migliore triplette di punti nei tre piani all'interno di un evento, necessario nel caso in cui vi sia più di un hit per ciascuna camera. \\ 
-Esso consiste nella selezione della coppia di tracce con chi quadro ridotto cumulativo [O INDIVIDUALE?] minimo tra tutte quelle considerate. Una volta identificata la traccia migliore viene effettuata un'ulteriore selezione sul chi quadro in modo da escludere gli eventuali eventi in cui non esista alcuna terna di punti riconducibile ad una traccia rettilinea nel rivelatore.
+Esso consiste nella selezione della coppia di tracce con somma dei $\chi^2$ delle proiezioni minima tra tutte quelle considerate. Una volta identificata la traccia migliore viene effettuata un'ulteriore selezione sul chi quadro in modo da escludere gli eventuali eventi in cui non esista alcuna terna di punti riconducibile ad una traccia rettilinea nel rivelatore.
 %L'algoritmo si configura come un ciclo delle seguenti operazioni all'interno di ogni evento:\\
 %\\
 %\begin{enumerate}
@@ -354,7 +357,7 @@ Esso consiste nella selezione della coppia di tracce con chi quadro ridotto cumu
 (DECISIONE DI QUALE SOGLIA DEL CHI QUADRO METTERE, IMPORTANTE E PROVARE A GIUSTIFICARE)\\
 
 
-\subsubsection{Algoritmo di riconoscimento dei \textit{clusters}}
+\subsubsection{Algoritmo di riconoscimento dei \textit{clusters}} \label{subsubsec:clusters}
 Alcuni eventi possono rilasciare, per diverse cause fisiche, energia in un'area più vasta della camera e risultare dunque nella registrazione di un insieme di punti ravvicinati.
 Utilizzando la distanza di correlazione trovata in sez. \ref{subsec:dis_corr}, è stata implementato il seguente algoritmo di riconoscimento: \\
 \begin{enumerate}
@@ -377,7 +380,85 @@ Le misure sono state effettuate in un periodo di tempo troppo limitato per poter
 
 
 \section{Risultati Sperimentali}
+\subsection{Distribuzioni angolari}
+Per l'analisi della distribuzione angolare è stato analizzato un file ad alta statistica con modalità di trigger \textit{AND\_ALL}. I risultati delle distribuzioni in $\theta$ e $\phi$ sono mostrati in fig. \ref{fig:distheta}, \ref{fig:disphi}. \\
+
+\begin{figure}
+\centering
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=1.2\linewidth]{distheta}
+  \caption{Distribuzione sperimentale di $\theta$.}
+  \label{fig:distheta}
+\end{subfigure}%
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=1.2\linewidth]{disphi}
+  \caption{Distribuzione sperimentale di $\phi$.}
+  \label{fig:disphi}
+\end{subfigure}
+\caption{Distribuzioni angolari ricavate dall'analisi di eventi AND\_ALL. Le tensioni delle camere utilizzate sono state: $V_1 = 9500 V, \ V_2 = 9300 V,\ V_3 = 9000 V$}
+\label{fig:disangolo}
+\end{figure}
+
+Si nota un comportamento qualitativamente corretto delle due distribuzioni, nonostante la distribuzione in $\phi$ presenti una lieve asimmetria, che potrebbe essere dovuta a un disallineamento lungo la coordinata y delle strip. La procedura di correzione geometrica descritta in \ref{subsec:corr_geom}   In fig. \ref{fig:distheta_clust} e \ref{fig:disphi_clust} è invece mostrato il confronto tra le distribuzioni prima e dopo l'operazione di cluster. \\
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\linewidth]{distheta_clust}
+  \caption{Distribuzioni sperimentali di $\theta$ prima e dopo il cluster.}
+  \label{fig:distheta_clust}
+\end{figure}%
+
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\linewidth]{disphi_clust}
+  \caption{Distribuzioni sperimentali di $\phi$ prima e dopo il cluster.}
+  \label{fig:distheta_clust}
+\end{figure}%
+
+La differenza tra le due distribuzioni è poco rilevante per quanto riguarda $\theta$, in cui si nota uno smussamento nella zona del massimo locale, mentre è evidente nel caso della $\phi$, in particolare nella zona vicino a $\phi = 90°, \ 270°$. Si nota infatti che molti degli eventi che prima costituivano i picchi hanno contribuito a riempire le zone adiacenti. Questo effetto risulta comprensibile alla luce del fatto che i picchi sono dovuti agli eventi in cui i punti hanno le stesse coordinate x. Se, in concomitanza con questo fatto, accade che vi sia un rilascio di energia sufficiente a produrre un segnale su varie strip vicine, le coordinate x vengono mediate, risultando dunque in un valore di $\phi$ diverso da $90°$ o $270°$. \\
+
+In fig. \ref{fig:confronto_expVSzone} è mostrato il confronto tra la distribuzione sperimentale e quella simulata tenendo anche conto della non uniformità dell'efficienza sulle tre camere. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{confronto_expVSzone}
+\caption{Confronto tra la distribuzione misurata sperimentalmente e quella ottenuta dalla simulazione, tenendo conto della discretizzazione della coordinata x e della non uniformità spaziale dell'efficienza.}
+\label{fig:confronto_expVSzone}
+\end{center}
+\end{figure}
+
+!!!! Le due distribuzioni, seppur presentando caratteristiche qualitative simili, non risultano compatibili (SOLO IN PHI?). \\
+
+La simulazione con cui è stato effettuato questo confronto ha restituito un valore di accettanza totale uguale a: \\
+
+\[ a = 11.1156 \% \] piu o meno??? \\
+
+Questo valore comprende sia l'accettanza geometrica che l'efficienza delle camere. L'errore è interamente dovuto alla determinazione delle caratteristiche geometriche delle camere, alcune delle quali sono note solo dalle specifiche fornite senza un'incertezza, e per le quali è stato supposto un errore pari a $1\%$ del valore della misura. !!! 
+ 
+Si calcola infine il flusso come: \\
+
+\[ \Phi_0 = \frac{N_{ev}}{\Delta t \cdot A \cdot a} = !!!! \]
+
+dove $N_{ev}$ è il numero di eventi totali contenuti nel file analizzato, $\Delta t$ il tempo in cui sono stati misurati, $A$ l'area attiva della camera, $a$ l'accettanza. \\
+
+\'E necessario correggere questa misura a causa del tempo morto $\tau$. Risulta: \\
+
+\[ \Phi = \Phi_0 \ \frac{1}{1-N_{ev}\tau} \]
+
 \section{Conclusioni}
+Per quanto riguarda la distribuzione angolare, il risultato trovato è risultato incompatibile con le misure, nonostante le caratteristiche qualitative dello spettro simulato siano state riscontrate in quello misurato. Si ritiene che questa differenza sia dovuta in particolar modo alla non corretta simulazione di alcuni effetti. In particolare, la simulazione assume come validi vari modelli: \\
+\begin{itemize}
+\item Il processo di discretizzazione della coordinata x avviene secondo un ben determinato modello, che prevede che quando la particella attraversa un punto il segnale viene raccolto solo dalla strip più vicina.
+\item Se una particella passa in un punto vicino a una strip difettosa non viene raccolto alcun segnale.
+\end{itemize}
+
+!!!QUALCOS'ALTRO?? !!!
+
+Per quanto riguarda il flusso, il suo valore risulta essere ????? a che energia dovrebbe corrispondere?? è plausibile che sia stata assorbita tanta energia??
+
 
 \input{bibEEE.bib}
 
